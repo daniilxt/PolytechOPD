@@ -3,6 +3,7 @@ import java.util.HashSet;
 
 public class Card {
   private String companyName = "";
+  private String typeOfOrganization = "";
   private HashSet<String> phoneNumber = new HashSet<>(); //HashSet тк эл-ты не могут повторяться
   private HashSet<String> emails = new HashSet<>();
   private HashSet<String> website = new HashSet<>();
@@ -10,6 +11,10 @@ public class Card {
 
   public void setCompanyName(String companyName) {
     this.companyName = companyName;
+  }
+
+  public void setTypeOfOrganization(String typeOfOrganization) {
+    this.typeOfOrganization = typeOfOrganization;
   }
 
   public void setPhoneNumber(String phoneNumber) {
@@ -29,7 +34,8 @@ public class Card {
   }
 
   public void showCardInfo() {
-    System.out.println("\nCompany name: " + companyName);
+    System.out.println("\nCompany name: \n" + companyName);
+    System.out.println("\nCompany type: \n" + typeOfOrganization);
     System.out.println("\nCompany address: ");
     printContainer(officeAddress);
     System.out.println("\nCompany phones: ");
@@ -46,3 +52,4 @@ public class Card {
     }
   }
 }
+
