@@ -1,4 +1,3 @@
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -30,7 +29,7 @@ public class Recognize {
       cityStrBuilder.append(" ");
     }
     cityName = validateCity(cityStrBuilder.toString());
-    //System.out.println(fullString);
+    System.out.println(fullString);
 
     parseName(visitCard, text);
     parseAddress(visitCard, fullString.toString(), cityName);
@@ -68,6 +67,9 @@ public class Recognize {
         visitCard.setWebsite(str.substring(matcher.start(), matcher.end()));
       }
     }
+    /*
+    * TODO fix when email domain is valid web site
+    *  */
   }
 
   private void parseEmail(Card visitCard, String str) {
@@ -114,6 +116,9 @@ public class Recognize {
         visitCard.setTypeOfOrganization(item.toLowerCase());
       }
     }
+    /*
+    * TODO add method findTypeOrganizationFromWeb
+    *  */
   }
 
   private void parseName(Card visitCard, ArrayList<String> text) {
@@ -122,6 +127,11 @@ public class Recognize {
         visitCard.setContactName(str);
         break;
       }
+      /*
+      *
+      *TODO add method parse name, if suffix is missing
+      *
+      * */
 
     }
   }
