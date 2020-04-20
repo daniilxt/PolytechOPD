@@ -1,3 +1,5 @@
+package old;
+
 import java.awt.Graphics2D;
 import net.sourceforge.tess4j.*;
 import java.awt.Image;

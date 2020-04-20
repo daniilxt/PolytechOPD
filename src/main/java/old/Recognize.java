@@ -1,5 +1,6 @@
+package old;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,8 +29,14 @@ public class Recognize {
       cityStrBuilder.append(item);
       cityStrBuilder.append(" ");
     }
+    System.out.println("SSBUILDER: -" + cityStrBuilder);
+    System.out.println("\n");
+    for (String item : text) {
+      System.out.print(item + " ");
+    }
+    System.out.println("\n");
     cityName = validateCity(cityStrBuilder.toString());
-    System.out.println(fullString);
+    System.out.println("Full str is: " + fullString);
 
     parseName(visitCard, text);
     parseAddress(visitCard, fullString.toString(), cityName);

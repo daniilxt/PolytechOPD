@@ -1,14 +1,15 @@
-import java.util.ArrayList;
+package Parsers;
+
 import java.util.HashSet;
 
 public class Card {
   private String companyName = "";
   private String contactName = "";
   private String typeOfOrganization = "";
-  private HashSet<String> phoneNumber = new HashSet<>(); //HashSet тк эл-ты не могут повторяться
-  private HashSet<String> emails = new HashSet<>();
-  private HashSet<String> website = new HashSet<>();
-  private HashSet<String> officeAddress = new HashSet<>();
+  private final HashSet<String> phoneNumber = new HashSet<>(); //HashSet тк эл-ты не могут повторяться
+  private final HashSet<String> emails = new HashSet<>();
+  private final HashSet<String> website = new HashSet<>();
+  private final HashSet<String> officeAddress = new HashSet<>();
 
   public void setCompanyName(String companyName) {
     this.companyName = companyName;
