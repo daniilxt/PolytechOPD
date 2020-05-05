@@ -19,9 +19,6 @@ import android.widget.SearchView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,14 +27,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton floatingActionButton;
     MyAdapter myAdapter;
 
-    DateBase dateBase = new DateBase();
+    DataBase dataBase = new DataBase();
 
 //    List<String> s1 = new ArrayList<String>();
 //    List<String> s2 = new ArrayList<String>();
 //    List<Integer> images = new ArrayList<Integer>();
-    List<String> s1 = dateBase.s1;
-    List<String> s2 = dateBase.s2;
-    List<Integer> images = dateBase.images;
+    //List<String> s1 = dataBase.s1;
+    //List<String> s2 = dataBase.s2;
+    //List<Integer> images = dataBase.images;
     Container delData = new Container();
 
     @Override
@@ -45,9 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        s1 = dateBase.s1;
-        s2 = dateBase.s2;
-        images = dateBase.images;
+        //s1 = dataBase.s1;
+        //s2 = dataBase.s2;
+        //images = dataBase.images;
 
         recyclerView = findViewById(R.id.recyclerView);
 //        s1.add("C++");
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        images.add(R.drawable.visual_studio);
 
 
-        myAdapter = new MyAdapter(this, s1, s2, images);
+        myAdapter = new MyAdapter(this, dataBase);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -105,22 +102,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             final int position = viewHolder.getAdapterPosition();
-            delData.setParam(s1.get(position), s2.get(position), images.get(position));
+            //delData.setParam(s1.get(position), s2.get(position), images.get(position));
+            delData = dataBase.getItem(position);
 
-            dateBase.delete(position);
-            s1 = dateBase.s1;
-            s2 = dateBase.s2;
-            images = dateBase.images;
+            dataBase.delete(position);
+            //s1 = dataBase.s1;
+            //s2 = dataBase.s2;
+            //images = dataBase.images;
             myAdapter.remove(position);
             myAdapter.notifyItemRemoved(position);
             Snackbar.make(recyclerView, delData.getString1(), Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dateBase.insert(position, delData.getString1(), delData.getString2(), delData.getImage());
-                            s1 = dateBase.s1;
-                            s2 = dateBase.s2;
-                            images = dateBase.images;
+                            dataBase.insert(position, delData.getString1(), delData.getString2(), delData.getImage());
+                            //s1 = dataBase.s1;
+                            //s2 = dataBase.s2;
+                            //images = dataBase.images;
                             myAdapter.insert(delData, position);
                             myAdapter.notifyItemInserted(position);
                         }

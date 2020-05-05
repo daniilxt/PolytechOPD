@@ -3,12 +3,12 @@ package com.university.scan;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateBase {
-    public List<String> s1 = new ArrayList<String>();
-    public List<String> s2 = new ArrayList<String>();
-    public List<Integer> images = new ArrayList<Integer>();
+public class DataBase {
+    private List<String> s1 = new ArrayList<String>();
+    private List<String> s2 = new ArrayList<String>();
+    private List<Integer> images = new ArrayList<Integer>();
 
-    public DateBase (){
+    public DataBase(){
         s1.add("C++");
         s1.add("C#");
         s1.add("Java");
@@ -51,6 +51,24 @@ public class DateBase {
         s1.add(position, st1);
         s2.add(position, st2);
         images.add(position, in);
+    }
+
+    public List<String> getS1() {
+        return s1;
+    }
+
+    public List<String> getS2() {
+        return s2;
+    }
+
+    public List<Integer> getImages() {
+        return images;
+    }
+
+    public Container getItem(int position) {
+        Container con = new Container();
+        con.setParam(s1.get(position), s2.get(position), images.get(position));
+        return con;
     }
 
 }

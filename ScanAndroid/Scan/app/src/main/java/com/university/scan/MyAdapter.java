@@ -23,21 +23,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     List<String> data1;
     List<String> data2;
     List<Integer> images;
-    List<String> data1All;
-    List<String> data2All;
-    List<Integer> imagesAll;
+    //List<String> data1All;
+    //List<String> data2All;
+    //List<Integer> imagesAll;
+    DataBase dataBase;
     List<Integer> fil;
     Context context;
     int count = 0;
 
-    public MyAdapter(Context ct, List<String> s1, List<String> s2, List<Integer> img){
+    public MyAdapter(Context ct, DataBase db){
         context = ct;
-        data1All = s1;
-        data2All = s2;
-        imagesAll = img;
-        data1 = new ArrayList<>(s1);
-        data2 = new ArrayList<>(s2);
-        images = new ArrayList<>(img);
+        dataBase = db;
+        //data1All = dataBase.getS1();
+        //data2All = dataBase.getS2();
+        //imagesAll = dataBase.getImages();
+        data1 = new ArrayList<>(db.getS1());
+        data2 = new ArrayList<>(db.getS2());
+        images = new ArrayList<>(db.getImages());
         fil = new ArrayList<Integer>();
     }
 
@@ -50,6 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         data1.remove(position);
         data2.remove(position);
         images.remove(position);
+        dataBase.delete(position);
         print();
     }
 
@@ -57,6 +60,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         data1.add(position, cont.getString1());
         data2.add(position, cont.getString2());
         images.add(position, cont.getImage());
+        dataBase.insert(position, cont.getString1(), cont.getString2(), cont.getImage());
     }
 
     @NonNull
@@ -103,13 +107,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
 
             if (constraint.toString().isEmpty()){
-                for (Integer i = 0; i < data1All.size(); i++){
+                for (Integer i = 0; i < dataBase.getS1().size(); i++){
                     filterList.add(i);
                 }
             } else {
-                for (Integer i = 0; i < data1All.size(); i++){
-                    if (data1All.get(i).toLowerCase().contains(constraint.toString().toLowerCase())
-                    || data2All.get(i).toLowerCase().contains(constraint.toString().toLowerCase()))
+                for (Integer i = 0; i < dataBase.getS1().size(); i++){
+                    if (dataBase.getS1().get(i).toLowerCase().contains(constraint.toString().toLowerCase())
+                    || dataBase.getS2().get(i).toLowerCase().contains(constraint.toString().toLowerCase()))
                     {
                         filterList.add(i);
                     }
@@ -130,9 +134,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             data2.clear();
             images.clear();
             for (Integer i:fil){
-                data1.add(data1All.get(i));
-                data2.add(data2All.get(i));
-                images.add(imagesAll.get(i));
+                data1.add(dataBase.getS1().get(i));
+                data2.add(dataBase.getS2().get(i));
+                images.add(dataBase.getImages().get(i));
             }
             notifyDataSetChanged();
         }
