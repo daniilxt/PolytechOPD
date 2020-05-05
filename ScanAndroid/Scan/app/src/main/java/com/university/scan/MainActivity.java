@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //delData.setParam(s1.get(position), s2.get(position), images.get(position));
             delData = dataBase.getItem(position);
 
-            dataBase.delete(position);
+            //dataBase.delete(position);
             //s1 = dataBase.s1;
             //s2 = dataBase.s2;
             //images = dataBase.images;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dataBase.insert(position, delData.getString1(), delData.getString2(), delData.getImage());
+                            //dataBase.insert(position, delData.getString1(), delData.getString2(), delData.getImage());
                             //s1 = dataBase.s1;
                             //s2 = dataBase.s2;
                             //images = dataBase.images;

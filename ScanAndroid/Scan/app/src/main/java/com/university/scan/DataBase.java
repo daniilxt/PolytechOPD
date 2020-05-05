@@ -71,4 +71,10 @@ public class DataBase {
         return con;
     }
 
+    public void clearDB() {
+        s1.clear();
+        s2.clear();
+        images.clear();
+    }
+
 }
