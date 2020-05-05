@@ -7,14 +7,14 @@ import java.io.File;
 
 public class MainTesseract {
   public static void main(String[] args) {
-
+    System.out.println(((int) ((0 + Math.random() * 12345) / 6)));
     Tesseract tesseract = new Tesseract();
     tesseract.setLanguage("rus");
     System.out.println("PLEASE, WAIT...");
     try {
-      int visNumber = 16;
+      int visNumber = 5;
       for (int i = 0; i < 1; i++) {
-        String PATH = "/home/daniilxt/exam/github/JavaSPBSTU/OCRPtoject/recognize/rus/vis" + visNumber + ".jpg";
+        String PATH = "/home/daniilxt/exam/github/JavaSPBSTU/OCRPtoject/recognize/rus/ramz/vis" + visNumber + ".jpg";
         String text = tesseract.doOCR(new File(PATH));
         tesseract.setLanguage("eng");
         String text1 = tesseract.doOCR(new File(PATH));

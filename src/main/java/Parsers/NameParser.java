@@ -11,18 +11,22 @@ public class NameParser extends AddressParser {
   }
 
   private void setName(String fullString) {
-    String[] upperWords = upperCaseWords(fullString).split("\n");
+    String[] upperWords = upperCaseWords(fullString).split(" ");
+    int i = 0;
     for (String str : upperWords) {
+      System.out.println("UPPER NAMES:" + str);
+      i++;
       if (isRealName(str)) {
-        visitCard.setContactName(str);
+        String name = upperWords[i - 2] + " " + upperWords[i - 1];// fiiiiiix
+        visitCard.setContactName(name);
         break;
       }
-/*
+      /*
        *
        *TODO add method parse name, if suffix is missing
        *
        *
-*/
+       */
 
     }
   }

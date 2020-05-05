@@ -24,12 +24,12 @@ public class Recognize {
       webSiteParser.parse(str);
       emailParser.parse(str);
       typeOrganizationParser.parse(str);
-      nameParser.parse(str);
 
       fullString.append(str);
       fullString.append(" ");
     }
     System.out.println("Full - " + fullString);
+    nameParser.parse(fullString.toString());
     addressParser.parse(fullString.toString());
     visitCard.showCardInfo();
   }
