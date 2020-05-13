@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':Parserlib'
 rootProject.name='Scan'
