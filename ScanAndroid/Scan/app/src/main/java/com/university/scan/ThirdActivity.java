@@ -93,20 +93,20 @@ public class ThirdActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             System.out.println("2");
-            File photoFile = null;
+            saveDir = null;
             try {
-                photoFile = createImageFile();
-                System.out.println(photoFile);
+                saveDir = createImageFile();
+                System.out.println(saveDir);
             } catch (IOException ex) {
                 // Error occurred while creating the File
             }
             System.out.println("3");
             // Continue only if the File was successfully created
-            if (photoFile != null) {
+            if (saveDir != null) {
                 System.out.println("4");
                 outputFileUri = FileProvider.getUriForFile(this,
                         "com.university.scan.fileprovider",
-                        photoFile);
+                        saveDir);
                 System.out.println("5");
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
