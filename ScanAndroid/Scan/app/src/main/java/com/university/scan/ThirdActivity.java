@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import Parsers.Card;
-
 public class ThirdActivity extends AppCompatActivity {
 
     private Button cameraButton;

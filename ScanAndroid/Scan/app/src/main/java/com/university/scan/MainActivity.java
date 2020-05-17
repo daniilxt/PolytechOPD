@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +21,13 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -41,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //System.out.println("before");
+        //copyFileOrDir("tessData");
+        //System.out.println("after");
+        copyFile("eng_traineddata.traineddata");
+        copyFile("rus_traineddata.traineddata");
 
         //s1 = dataBase.s1;
         //s2 = dataBase.s2;
@@ -170,5 +185,119 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    /*private void copyFileOrDir(String path) {
+        AssetManager assetManager = this.getAssets();
+        String assets[] = null;
+        try {
+            assets = assetManager.list(path);
+            System.out.println("assets: " + Arrays.toString(assets));
+            if (assets.length == 0) {
+                copyFile(path);
+            } else {
+                String cachePath = getCacheDir().getAbsolutePath();
+                //String fullPath = "/data/data/" + this.getPackageName() + "/" + path;
+                String fullPath = getCacheDir().getAbsolutePath() + "/tessData";
+                System.out.println(fullPath);
+                File dir = new File(fullPath);
+                if (!dir.exists())
+                    dir.mkdir();
+                for (int i = 0; i < assets.length; ++i) {
+                    copyFileOrDir(path + "/" + assets[i]);
+                }
+            }
+        } catch (IOException ex) {
+            Log.e("tag", "I/O Exception", ex);
+        }
+    }
+
+    private void copyFile(String filename) {
+        AssetManager assetManager = this.getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(filename);
+            //System.out.println(in.read());
+            String fullPath = getCacheDir().getAbsolutePath() + "/tessData";
+
+            String newFileName = fullPath + "/" + filename;
+            System.out.println(newFileName);
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
+    }*/
+
+    private void copyFileOrDir(String path) {
+        AssetManager assetManager = this.getAssets();
+        String assets[] = null;
+        try {
+            assets = assetManager.list(path);
+            if (assets.length == 0) {
+                copyFile(path);
+            } else {
+                //String fullPath = "/data/data/" + this.getPackageName() + "/" + path;
+                String fullPath = Environment.DIRECTORY_DOCUMENTS;
+                System.out.println(fullPath);
+                File dir = new File(fullPath);
+                if (!dir.exists())
+                    dir.mkdir();
+                for (int i = 0; i < assets.length; ++i) {
+                    copyFileOrDir(path + "/" + assets[i]);
+                }
+            }
+        } catch (IOException ex) {
+            Log.e("tag", "I/O Exception", ex);
+        }
+    }
+
+    private void copyFile(String filename) {
+        AssetManager assetManager = this.getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(filename);
+            System.out.println(Environment.getDataDirectory().getAbsolutePath());
+
+            //String newFileName = "/data/data/" + this.getPackageName() + "/" + filename;
+            File storageDir = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+            File folder = new File(storageDir, "tessdata");
+            folder.mkdirs();
+
+            //String newFileName = storageDir.getAbsolutePath() + "/" + filename;
+            String newFileName = folder.getAbsolutePath() + "/" + filename;
+            //String newFileName = Environment.getDataDirectory().getAbsolutePath() + "/" +
+             //       this.getPackageName() + "/files/tessdata/"+ filename;
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
     }
 }
