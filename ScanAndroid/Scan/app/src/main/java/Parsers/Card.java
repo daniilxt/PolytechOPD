@@ -23,6 +23,34 @@ public class Card {
     this.typeOfOrganization = typeOfOrganization;
   }
 
+  public String getCompanyName() {
+    return companyName;
+  }
+
+  public String getContactName() {
+    return contactName;
+  }
+
+  public String getTypeOfOrganization() {
+    return typeOfOrganization;
+  }
+
+  public HashSet<String> getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public HashSet<String> getEmails() {
+    return emails;
+  }
+
+  public HashSet<String> getWebsite() {
+    return website;
+  }
+
+  public HashSet<String> getOfficeAddress() {
+    return officeAddress;
+  }
+
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber.add(phoneNumber);
   }
