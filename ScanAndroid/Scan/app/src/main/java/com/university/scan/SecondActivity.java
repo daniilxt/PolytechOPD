@@ -2,6 +2,7 @@ package com.university.scan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,7 @@ public class SecondActivity extends AppCompatActivity {
     int openedAddresses;
     int openedEmails;
     int openedSites;
+    private Uri outputFileUri;
 
     String data1, data2;
     int myImage;
@@ -41,13 +43,21 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+        mainImageView = findViewById(R.id.mainImageView);
+
+        Bundle arguments = getIntent().getExtras();
+        if (arguments != null) {
+            System.out.println("not null arguments!");
+            outputFileUri = (Uri) arguments.get("outputFileUri");
+            System.out.println(outputFileUri.getPath());
+            mainImageView.setImageURI(outputFileUri);
+        }
 
         openedPhones = 0;
         openedAddresses = 0;
         openedEmails = 0;
         openedSites = 0;
 
-        mainImageView = findViewById(R.id.mainImageView);
         TRPhone2 = findViewById(R.id.TRPhone2);
         TRPhone3 = findViewById(R.id.TRPhone3);
         TRAddress2 = findViewById(R.id.TRAddress2);

@@ -3,15 +3,20 @@ package com.university.scan;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -27,7 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -36,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
     MyAdapter myAdapter;
+    private Uri outputFileUri;
+    private Context context;
+    private File saveDir;
+    private String currentPhotoPath;
+    private static int TAKE_PICTURE_REQUEST = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
 
     DataBase dataBase = new DataBase();
 
@@ -51,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
+        saveDir = context.getCacheDir();
         //System.out.println("before");
         //copyFileOrDir("tessData");
         //System.out.println("after");
@@ -179,11 +195,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.floatingActionButton2:
-                Intent intent = new Intent(this, ThirdActivity.class);
-                startActivity(intent);
+                dispatchTakePictureIntent();
+                //Intent intent = new Intent(this, ThirdActivity.class);
+                //startActivity(intent);
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == TAKE_PICTURE_REQUEST && resultCode == RESULT_OK) {
+            // Проверяем, содержит ли результат маленькую картинку
+            if (data != null) {
+                if (data.hasExtra("data")) {
+                    Bitmap thumbnailBitmap = data.getParcelableExtra("data");
+                    // Какие-то действия с миниатюрой
+                    //imageView.setImageBitmap(thumbnailBitmap);
+                }
+            } else {
+                // Какие-то действия с полноценным изображением,
+                // сохраненным по адресу outputFileUri
+                //imageView.setImageURI(outputFileUri);
+                System.out.println("picture taken!");
+                System.out.println(outputFileUri.getPath());
+                Intent intent = new Intent(this, SecondActivity.class);
+                intent.putExtra("outputFileUri", outputFileUri);
+                startActivity(intent);
+
+            }
         }
     }
 
@@ -241,6 +284,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }*/
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        System.out.println("1");
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            System.out.println("2");
+            saveDir = null;
+            try {
+                saveDir = createImageFile();
+                System.out.println(saveDir);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            System.out.println("3");
+            // Continue only if the File was successfully created
+            if (saveDir != null) {
+                System.out.println("4");
+                outputFileUri = FileProvider.getUriForFile(this,
+                        "com.university.scan.fileprovider",
+                        saveDir);
+                System.out.println("5");
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                System.out.println("6");
+            }
+        }
+    }
 
     private void copyFileOrDir(String path) {
         AssetManager assetManager = this.getAssets();
