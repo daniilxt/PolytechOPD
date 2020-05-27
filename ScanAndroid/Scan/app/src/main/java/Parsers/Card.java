@@ -3,20 +3,63 @@ package Parsers;
 import java.util.HashSet;
 
 public class Card {
+  private long id = -1;
   private String companyName = "";
-  private String contactName = "";
+  private String firstName = "";
+  private String lastName = "";
+  private String fatherName = "";
   private String typeOfOrganization = "";
-  private final HashSet<String> phoneNumber = new HashSet<>(); //HashSet тк эл-ты не могут повторяться
+
+  private final HashSet<String> phoneNumbers = new HashSet<>(); //HashSet тк эл-ты не могут повторяться
   private final HashSet<String> emails = new HashSet<>();
   private final HashSet<String> website = new HashSet<>();
   private final HashSet<String> officeAddress = new HashSet<>();
 
-  public void setCompanyName(String companyName) {
-    this.companyName = companyName;
+  public Card() {
   }
 
-  public void setContactName(String companyName) {
-    this.contactName = companyName;
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public Card(String companyName, String firstName, String lastName, String fatherName, String typeOfOrganization) {
+    this.companyName = companyName;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.fatherName = fatherName;
+    this.typeOfOrganization = typeOfOrganization;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setFatherName(String fatherName) {
+    this.fatherName = fatherName;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String getFatherName() {
+    return fatherName;
+  }
+
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
   }
 
   public void setTypeOfOrganization(String typeOfOrganization) {
@@ -27,16 +70,12 @@ public class Card {
     return companyName;
   }
 
-  public String getContactName() {
-    return contactName;
-  }
-
   public String getTypeOfOrganization() {
     return typeOfOrganization;
   }
 
-  public HashSet<String> getPhoneNumber() {
-    return phoneNumber;
+  public HashSet<String> getPhoneNumbers() {
+    return phoneNumbers;
   }
 
   public HashSet<String> getEmails() {
@@ -51,30 +90,29 @@ public class Card {
     return officeAddress;
   }
 
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber.add(phoneNumber);
+  public void addPhoneNumber(String phoneNumber) {
+    this.phoneNumbers.add(phoneNumber);
   }
 
-  public void setEmails(String emails) {
+  public void addEmail(String emails) {
     this.emails.add(emails);
   }
 
-  public void setWebsite(String website) {
+  public void addWebsite(String website) {
     this.website.add(website);
   }
 
-  public void setOfficeAddress(String officeAddress) {
+  public void addOfficeAddress(String officeAddress) {
     this.officeAddress.add(officeAddress);
   }
 
   public void showCardInfo() {
     System.out.println("\nCompany name: \n" + companyName);
-    System.out.println("\nContact name: \n" + contactName);
     System.out.println("\nCompany type: \n" + typeOfOrganization);
     System.out.println("\nCompany address: ");
     printContainer(officeAddress);
     System.out.println("\nCompany phones: ");
-    printContainer(phoneNumber);
+    printContainer(phoneNumbers);
     System.out.println("\nCompany emails: ");
     printContainer(emails);
     System.out.println("\nCompany website: ");

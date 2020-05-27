@@ -2,16 +2,22 @@ package com.university.scan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.university.scan.SQL.LocalSQL;
+
+import Parsers.Card;
+
 public class SecondActivity extends AppCompatActivity {
+
+    LocalSQL sql;
 
     ImageView mainImageView;
     TableRow TRPhone2;
@@ -30,11 +36,27 @@ public class SecondActivity extends AppCompatActivity {
     Button BDelEmail;
     Button BAddSite;
     Button BDelSite;
+    Button floatingActionButton2;
     int openedPhones;
     int openedAddresses;
     int openedEmails;
     int openedSites;
-    private Uri outputFileUri;
+    EditText ETLastName;
+    EditText ETFirstName;
+    EditText ETFatherName;
+    EditText ETCompany;
+    EditText ETPhone1;
+    EditText ETPhone2;
+    EditText ETPhone3;
+    EditText ETEmail1;
+    EditText ETEmail2;
+    EditText ETEmail3;
+    EditText ETAddress1;
+    EditText ETAddress2;
+    EditText ETAddress3;
+    EditText ETSite1;
+    EditText ETSite2;
+    EditText ETSite3;
 
     String data1, data2;
     int myImage;
@@ -43,21 +65,32 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-        mainImageView = findViewById(R.id.mainImageView);
 
-        Bundle arguments = getIntent().getExtras();
-        if (arguments != null) {
-            System.out.println("not null arguments!");
-            outputFileUri = (Uri) arguments.get("outputFileUri");
-            System.out.println(outputFileUri.getPath());
-            mainImageView.setImageURI(outputFileUri);
-        }
+        sql = new LocalSQL(SecondActivity.this);
 
         openedPhones = 0;
         openedAddresses = 0;
         openedEmails = 0;
         openedSites = 0;
 
+        ETLastName= findViewById(R.id.ETLastName);
+        ETFirstName= findViewById(R.id.ETFirstName);
+        ETFatherName= findViewById(R.id.ETFatherName);
+        ETCompany= findViewById(R.id.ETCompany);
+        ETPhone1= findViewById(R.id.ETPhone1);
+        ETPhone2= findViewById(R.id.ETPhone2);
+        ETPhone3= findViewById(R.id.ETPhone3);
+        ETEmail1= findViewById(R.id.ETEmail1);
+        ETEmail2= findViewById(R.id.ETEmail2);
+        ETEmail3= findViewById(R.id.ETEmail3);
+        ETAddress1= findViewById(R.id.ETAddress1);
+        ETAddress2= findViewById(R.id.ETAddress2);
+        ETAddress3= findViewById(R.id.ETAddress3);
+        ETSite1= findViewById(R.id.ETSite1);
+        ETSite2= findViewById(R.id.ETSite2);
+        ETSite3= findViewById(R.id.ETSite3);
+
+        mainImageView = findViewById(R.id.mainImageView);
         TRPhone2 = findViewById(R.id.TRPhone2);
         TRPhone3 = findViewById(R.id.TRPhone3);
         TRAddress2 = findViewById(R.id.TRAddress2);
@@ -91,6 +124,58 @@ public class SecondActivity extends AppCompatActivity {
         TRSite2.setVisibility(View.GONE);
         TRSite3.setEnabled(false);
         TRSite3.setVisibility(View.GONE);
+
+        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Card card = new Card();
+
+                card.setFirstName(ETFirstName.getText().toString());
+                card.setLastName(ETLastName.getText().toString());
+                card.setFatherName(ETFatherName.getText().toString());
+                card.setCompanyName(ETCompany.getText().toString());
+
+                if(!isEmpty(ETAddress1)) {
+                    card.addOfficeAddress(ETAddress1.getText().toString());
+                }
+                if(!isEmpty(ETAddress2)) {
+                    card.addOfficeAddress(ETAddress2.getText().toString());
+                }
+                if(!isEmpty(ETAddress3)) {
+                    card.addOfficeAddress(ETAddress3.getText().toString());
+                }
+
+                if(!isEmpty(ETEmail1)) {
+                    card.addEmail(ETEmail1.getText().toString());
+                }
+                if(!isEmpty(ETEmail2)) {
+                    card.addEmail(ETEmail2.getText().toString());
+                }
+                if(!isEmpty(ETEmail3)) {
+                    card.addEmail(ETEmail3.getText().toString());
+                }
+
+                if(!isEmpty(ETPhone1)) {
+                    card.addPhoneNumber(ETPhone1.getText().toString());
+                }
+                if(!isEmpty(ETPhone2)) {
+                    card.addPhoneNumber(ETPhone2.getText().toString());
+                }
+                if(!isEmpty(ETPhone3)) {
+                    card.addPhoneNumber(ETPhone3.getText().toString());
+                }
+
+                if(!isEmpty(ETSite1)) {
+                    card.addOfficeAddress(ETSite1.getText().toString());
+                }
+                if(!isEmpty(ETSite2)) {
+                    card.addOfficeAddress(ETSite2.getText().toString());
+                }
+                if(!isEmpty(ETSite3)) {
+                    card.addOfficeAddress(ETSite3.getText().toString());
+                }
+            }
+        });
 
         BAddPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,6 +451,10 @@ public class SecondActivity extends AppCompatActivity {
 
     private void setData() {
         mainImageView.setImageResource(myImage);
+    }
+
+    private boolean isEmpty(EditText etText) {
+        return etText.getText().toString().trim().length() == 0;
     }
 
 }

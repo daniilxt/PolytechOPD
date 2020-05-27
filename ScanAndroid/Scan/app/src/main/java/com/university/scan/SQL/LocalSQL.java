@@ -67,9 +67,9 @@ public class LocalSQL extends SQLiteOpenHelper {
                     ");\n",
             "create table [CardAddress](\n" +
                     "  card_id INTEGER NOT NULL,\n" +
-                    "  adress_id INTEGER NOT NULL,\n" +
+                    "  address_id INTEGER NOT NULL,\n" +
                     "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE,\n" +
-                    "  FOREIGN KEY (adress_id) REFERENCES [Adress](id) ON DELETE CASCADE\n" +
+                    "  FOREIGN KEY (address_id) REFERENCES [Adress](id) ON DELETE CASCADE\n" +
                     ");\n",
             "create table [CardEmail](\n" +
                     "  card_id INTEGER NOT NULL,\n" +
@@ -120,9 +120,10 @@ public class LocalSQL extends SQLiteOpenHelper {
             long nameId;
             long companyId;
 
-            card.getContactName();
             ContentValues contentValuesList = new ContentValues();
-            contentValuesList.put("first_name", card.getContactName());
+            contentValuesList.put("first_name", card.getFirstName());
+            contentValuesList.put("last_name", card.getFirstName());
+            contentValuesList.put("patronymic", card.getFatherName());
             nameId = db.insert("Name", null, contentValuesList);
 
             contentValuesList.clear();
@@ -135,7 +136,7 @@ public class LocalSQL extends SQLiteOpenHelper {
             contentValuesList.put("company_id", companyId);
             cardId = db.insert("Card", null, contentValuesList);
 
-            for (String phone : card.getPhoneNumber()) {
+            for (String phone : card.getPhoneNumbers()) {
                 contentValuesList.clear();
                 contentValuesList.put("phone", phone);
                 long phoneId = db.insert("Phone", null, contentValuesList);
@@ -187,13 +188,15 @@ public class LocalSQL extends SQLiteOpenHelper {
         Card card = new Card();
 
         if (db != null) {
+            card.setId(id);
+
             String rawQuery = "SELECT site FROM WebSite INNER JOIN CardWebSite " +
                     "ON WebSite.id = CardWebSite.website_id WHERE CardWebSite.card_id = " + id + ";";
             Cursor cursor = db.rawQuery(rawQuery, null);
 
             if (cursor.moveToFirst()) {
                 do {
-                    card.setWebsite(cursor.getString(0));
+                    card.addWebsite(cursor.getString(0));
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -204,32 +207,34 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             if (cursorPhone.moveToFirst()) {
                 do {
-                    card.setPhoneNumber(cursorPhone.getString(0));
+                    card.addPhoneNumber(cursorPhone.getString(0));
                 } while (cursorPhone.moveToNext());
             }
             cursorPhone.close();
 
             String rawQueryAddress = "SELECT address FROM Address INNER JOIN CardAddress " +
-                    "ON Address.id = CardAddress.adress_id WHERE CardAddress.card_id = " + id + ";";
+                    "ON Address.id = CardAddress.address_id WHERE CardAddress.card_id = " + id + ";";
             Cursor cursorAddress = db.rawQuery(rawQueryAddress, null);
 
             if (cursorAddress.moveToFirst()) {
                 do {
-                    card.setOfficeAddress(cursorAddress.getString(0));
+                    card.addOfficeAddress(cursorAddress.getString(0));
                 } while (cursorAddress.moveToNext());
             }
             cursorAddress.close();
 
-            String rawQueryName = "SELECT first_name FROM Name INNER JOIN Card" +
+            String rawQueryName = "SELECT first_name, last_name, patronymic FROM Name INNER JOIN Card" +
                     " ON Card.name_id = Name.id WHERE Card.id = " + id + ";";
             Cursor cursorName = db.rawQuery(rawQueryName, null);
-            card.setContactName(cursorName.getString(0));
+            card.setFirstName(cursorName.getString(0));
+            card.setLastName(cursorName.getString(1));
+            card.setFatherName(cursorName.getString(1));
             cursorName.close();
 
             String rawQueryCompany = "SELECT name FROM Company INNER JOIN Card" +
                     " ON Card.company_id = Company.id WHERE Card.id = " + id + ";";
             Cursor cursorCompany = db.rawQuery(rawQueryCompany, null);
-            card.setContactName(cursorCompany.getString(0));
+            card.setCompanyName(cursorCompany.getString(0));
             cursorCompany.close();
         }
         db.close();
@@ -276,17 +281,126 @@ public class LocalSQL extends SQLiteOpenHelper {
 
         if (db != null) {
 
-            String rawQuery = "UPDATE Phone SET phone = " + nextPhone + " WHERE " + prevPhone + " = (SELECT phone FROM Phone " +
-                    "INNER JOIN Phone ON Phone.id = CardPhone.phone_id WHERE CardPhone.card_id = " + cardId + ";";
+            String rawQuery = "UPDATE Phone SET phone = " + nextPhone + " WHERE " + prevPhone + "" +
+                    " = (SELECT phone FROM Phone INNER JOIN CardPhone ON Phone.id = " +
+                    "CardPhone.phone_id WHERE CardPhone.card_id = " + cardId + ";";
+
+            Cursor cursor = db.rawQuery(rawQuery, null);
+        }
+    }
+
+    public void addEmail(long cardId, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValuesList = new ContentValues();
+
+        contentValuesList.clear();
+        contentValuesList.put("email", email);
+        long phoneId = db.insert("Email", null, contentValuesList);
+
+        contentValuesList.clear();
+        contentValuesList.put("card_id", cardId);
+        contentValuesList.put("email_id", phoneId);
+        db.insert("CardEmail", null, contentValuesList);
+    }
+
+    private void updateEmail(long cardId, String prevPhone, String nextPhone) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (db != null) {
+
+            String rawQuery = "UPDATE Email SET email = " + nextPhone + " WHERE " + prevPhone +
+                    " = (SELECT email FROM Email INNER JOIN CardEmail ON Email.id = " +
+                    "CardEmail.email_id WHERE CardEmail.card_id = " + cardId + ";";
+
+            Cursor cursor = db.rawQuery(rawQuery, null);
+        }
+    }
+
+    public void addAddress(long cardId, String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValuesList = new ContentValues();
+
+        contentValuesList.clear();
+        contentValuesList.put("address", address);
+        long phoneId = db.insert("Address", null, contentValuesList);
+
+        contentValuesList.clear();
+        contentValuesList.put("card_id", cardId);
+        contentValuesList.put("address_id", phoneId);
+        db.insert("CardAddress", null, contentValuesList);
+    }
+
+    private void updateAddress(long cardId, String prevPhone, String nextPhone) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (db != null) {
+
+            String rawQuery = "UPDATE Address SET address = " + nextPhone + " WHERE " + prevPhone +
+                    " = (SELECT address FROM Address INNER JOIN CardAddress ON Address.id = " +
+                    "CardAddress.address_id WHERE CardAddress.card_id = " + cardId + ";";
+
+            Cursor cursor = db.rawQuery(rawQuery, null);
+        }
+    }
+
+    public void addWebsite(long cardId, String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValuesList = new ContentValues();
+
+        contentValuesList.clear();
+        contentValuesList.put("site", address);
+        long phoneId = db.insert("WebSite", null, contentValuesList);
+
+        contentValuesList.clear();
+        contentValuesList.put("card_id", cardId);
+        contentValuesList.put("website_id", phoneId);
+        db.insert("CardWebSite", null, contentValuesList);
+    }
+
+    private void updateWebsite(long cardId, String prevPhone, String nextPhone) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (db != null) {
+
+            String rawQuery = "UPDATE WebSite SET site = " + nextPhone + " WHERE " + prevPhone +
+                    " = (SELECT site FROM WebSite INNER JOIN CardWebSite ON WebSite.id = " +
+                    "CardWebSite.website_id WHERE CardWebSite.card_id = " + cardId + ";";
+
+            Cursor cursor = db.rawQuery(rawQuery, null);
+        }
+    }
+
+    private void updateName(long cardId, String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (db != null) {
+
+            String rawQuery = "UPDATE Name SET first_name = " + name + "INNER JOIN Card" +
+                    " ON Name.id = Card.name_id WHERE Card.id = " + cardId + ";";
+
+            Cursor cursor = db.rawQuery(rawQuery, null);
+        }
+    }
+
+    private void updateCompany(long cardId, String company) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (db != null) {
+
+            String rawQuery = "UPDATE Company SET name = " + company + "INNER JOIN Card" +
+                    " ON Company.id = Card.company_id WHERE Card.id = " + cardId + ";";
 
             Cursor cursor = db.rawQuery(rawQuery, null);
         }
     }
 
     private Record cardToRecord(Card card) {
-        return new Record(card.getCompanyName(),
-                card.getContactName(),
-                getFirstElemFromHashSet(card.getPhoneNumber()),
+        return new Record(card.getId(),
+                card.getCompanyName(),
+                card.getFirstName(),
+                card.getLastName(),
+                card.getFatherName(),
+                getFirstElemFromHashSet(card.getPhoneNumbers()),
                 getFirstElemFromHashSet(card.getEmails()),
                 getFirstElemFromHashSet(card.getWebsite()),
                 getFirstElemFromHashSet(card.getOfficeAddress()));

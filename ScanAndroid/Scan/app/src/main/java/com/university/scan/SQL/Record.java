@@ -4,20 +4,35 @@ import java.util.HashSet;
 
 //Record for RecyclerView
 public class Record {
+    private long id;
     private String companyName;
-    private String contactName;
+    private String firstName;
+    private String lastName = "";
+    private String fatherName = "";
     private String phoneNumber;
     private String emails;
     private String website;
     private String officeAddress;
 
-    public Record(String companyName, String contactName, String phoneNumber, String emails, String website, String officeAddress) {
+    public Record(long id, String companyName, String firstName, String lastName,
+                  String fatherName, String phoneNumber, String emails, String website, String officeAddress) {
         this.companyName = companyName;
-        this.contactName = contactName;
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fatherName = fatherName;
         this.phoneNumber = phoneNumber;
         this.emails = emails;
         this.website = website;
         this.officeAddress = officeAddress;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getCompanyName() {
@@ -28,12 +43,28 @@ public class Record {
         this.companyName = companyName;
     }
 
-    public String getContactName() {
-        return contactName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFatherName() {
+        return fatherName;
     }
 
     public String getPhoneNumber() {
