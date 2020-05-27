@@ -60,34 +60,34 @@ public class LocalSQL extends SQLiteOpenHelper {
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
                     "  [name_id] INTEGER, \n" +
                     "  [company_id] INTEGER, \n" +
-                    "  FOREIGN KEY [name_id] references [Name]([id]) ON DELETE CASCADE, \n" +
-                    "  FOREIGN KEY [company_id] references [Company]([id]) ON DELETE CASCADE, \n" +
+                    "  FOREIGN KEY [name_id] references [Name]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
+                    "  FOREIGN KEY [company_id] references [Company]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
                     "  [photo] IMAGE, \n" +
                     "  [qr] IMAGE\n" +
                     ");\n",
             "create table [CardAddress](\n" +
                     "  card_id INTEGER NOT NULL,\n" +
                     "  address_id INTEGER NOT NULL,\n" +
-                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE,\n" +
-                    "  FOREIGN KEY (address_id) REFERENCES [Adress](id) ON DELETE CASCADE\n" +
+                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                    "  FOREIGN KEY (address_id) REFERENCES [Adress](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");\n",
             "create table [CardEmail](\n" +
                     "  card_id INTEGER NOT NULL,\n" +
                     "  email_id INTEGER NOT NULL,\n" +
-                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE,\n" +
-                    "  FOREIGN KEY (email_id) REFERENCES [Adress](id) ON DELETE CASCADE\n" +
+                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                    "  FOREIGN KEY (email_id) REFERENCES [Adress](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");\n",
             "create table [CardPhone](\n" +
                     "  card_id INTEGER NOT NULL,\n" +
                     "  phone_id INTEGER NOT NULL,\n" +
-                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE,\n" +
-                    "  FOREIGN KEY (phone_id) REFERENCES [Phone](id) ON DELETE CASCADE\n" +
+                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                    "  FOREIGN KEY (phone_id) REFERENCES [Phone](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");\n",
             "create table [CardWebSite](\n" +
                     "  card_id INTEGER NOT NULL,\n" +
                     "  website_id INTEGER NOT NULL,\n" +
-                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE,\n" +
-                    "  FOREIGN KEY (website_id) REFERENCES [WebSite](id) ON DELETE CASCADE\n" +
+                    "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                    "  FOREIGN KEY (website_id) REFERENCES [WebSite](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");"};
 
     public LocalSQL(Context context) {
@@ -115,6 +115,15 @@ public class LocalSQL extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         if (db != null) {
+            long id = card.getId();
+            if (id != -1) {
+               db.delete("CardWebSite", "card_id = " + id, null);
+               db.delete("CardAddress", "card_id = " + id, null);
+               db.delete("CardPhone", "card_id = " + id, null);
+               db.delete("CardEmail", "card_id = " + id, null);
+
+               db.update();
+            }
 
             long cardId;
             long nameId;

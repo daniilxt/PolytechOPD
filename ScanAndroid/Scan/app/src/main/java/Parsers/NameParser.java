@@ -18,7 +18,7 @@ public class NameParser extends AddressParser {
       i++;
       if (isRealName(str)) {
         String name = upperWords[i - 2] + " " + upperWords[i - 1];// fiiiiiix
-        visitCard.setContactName(name);
+        visitCard.setFirstName(name);
         break;
       }
       /*
