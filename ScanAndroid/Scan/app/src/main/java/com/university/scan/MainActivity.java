@@ -63,10 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
-    SharedPreferences sharedpreferences;
 
     DataBase dataBase = new DataBase();
-    LocalSQL sql;
 
 //    List<String> s1 = new ArrayList<String>();
 //    List<String> s2 = new ArrayList<String>();
@@ -134,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        images.add(R.drawable.typescript);
 //        images.add(R.drawable.visual_studio);
 
-        sql = new LocalSQL(MainActivity.this);
-        myAdapter = new MyAdapter(this, sql);
+        //LocalSQL sql = new LocalSQL(MainActivity.this);
+        myAdapter = new MyAdapter(MainActivity.this);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -222,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.floatingActionButton2:
                 dispatchTakePictureIntent();
+
                 //Intent intent = new Intent(this, ThirdActivity.class);
                 //startActivity(intent);
                 break;
@@ -256,9 +255,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //
                 StaticVar.var = -1;
 
-                Intent intent = new Intent(this, SecondActivity.class);
-                intent.putExtra("outputFileUri", outputFileUri);
-                startActivity(intent);
+                //Intent intent = new Intent(this, SecondActivity.class);
+                //intent.putExtra("outputFileUri", outputFileUri);
+                //startActivity(intent);
 
             }
         }
@@ -420,9 +419,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
             Log.e("tag", e.getMessage());
         }
-
     }
-
 
     private class TessRun implements Runnable {
         @Override
@@ -494,11 +491,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Card> cardsArray =
                 tessractParser.getCardsArray();
 
+
+        System.out.println("asddddddddddddddddd\n");
         Card card = cardsArray.get(cardsArray.size() -1);
         card.setImage(currentPhotoPath);
-        card.showCardInfo();
 
         card.setFirstName("adasd");
+        LocalSQL sql = new LocalSQL(MainActivity.this);
         long id = sql.addCard(card);
 
         StaticVar.var = id;

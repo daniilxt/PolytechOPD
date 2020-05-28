@@ -3,6 +3,7 @@ package com.university.scan;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -113,19 +114,19 @@ public class SecondActivity extends AppCompatActivity {
         openedEmails = 0;
         openedSites = 0;
 
-        while (StaticVar.var == -1) {
-
-        }
 
         sql = new LocalSQL(SecondActivity.this);
 
-        long id  = getIntent().getLongExtra("key", 0);
+        long id  = getIntent().getLongExtra("id", 0);
+        //long id  = StaticVar.var;
 
 //        Toast toast = Toast.makeText(getApplicationContext(),
 //                idString, Toast.LENGTH_SHORT);
 //        toast.show();
 
         Card card = sql.getCard(id);
+
+        mainImageView.setImageURI(Uri.parse(card.getImage()));
 
         ETFirstName.setText(card.getFirstName().trim());
         ETLastName.setText(card.getLastName().trim());

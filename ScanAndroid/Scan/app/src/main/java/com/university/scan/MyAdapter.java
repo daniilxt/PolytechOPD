@@ -35,7 +35,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     List<Integer> fil;
     Context context;
     int count = 0;
-    private LocalSQL sql;
 
     private List<Record> records;
 
@@ -45,10 +44,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         void onItemClick(Record record);
     }
 
-    public MyAdapter(Context ct, LocalSQL sql){
+    public MyAdapter(Context ct){
         context = ct;
-        this.sql = sql;
-
+        LocalSQL sql = new LocalSQL(ct);
         this.records = sql.getRecords();
         fil = new ArrayList<Integer>();
     }
@@ -70,6 +68,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         notifyDataSetChanged();
     }
 
+    public void addItem(Record record) {
+        records.add(record);
+        notifyDataSetChanged();
+    }
+
     public void clearItems() {
         records.clear();
         notifyDataSetChanged();
@@ -82,6 +85,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
     public void remove(int position) {
         Record record = records.remove(position);
+        LocalSQL sql = new LocalSQL(context);
         sql.deleteCard(record.getId());
         notifyItemRemoved(position);
     }
@@ -160,7 +164,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     };
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         TextView myText1, myText2, company;
         ImageView myImage;
         ConstraintLayout mainLayout;
@@ -178,7 +181,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             myText1.setText(record.getFirstName());
             myText2.setText(record.getLastName());
             company.setText(record.getCompanyName());
-            myImage.setImageURI(Uri.parse(record.getImage()));
+            record.getImage();
+            //myImage.setImageURI(Uri.parse(record.getImage()));
         }
     }
 }
