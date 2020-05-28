@@ -62,8 +62,7 @@ public class LocalSQL extends SQLiteOpenHelper {
                     "  [company_id] INTEGER, \n" +
                     "  FOREIGN KEY [name_id] REFERENCES [Name]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
                     "  FOREIGN KEY [company_id] REFERENCES [Company]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
-                    "  [photo] IMAGE, \n" +
-                    "  [qr] IMAGE\n" +
+                    "  [photo] NVARCHAR \n" +
                     ");\n",
             "create table [CardAddress](\n" +
                     "  card_id,\n" +
@@ -161,11 +160,14 @@ public class LocalSQL extends SQLiteOpenHelper {
         }
     }
 
-    public void addCard(Card card) {
+    public long addCard(Card card) {
 //        SQLiteDatabase db = this.getWritableDatabase();
 
         if (db != null) {
             long id = card.getId();
+            long cardId = id;
+            long nameId;
+            long companyId;
             if (id != -1) {
                 db.delete("CardWebSite", "card_id = " + id, null);
                 db.delete("CardAddress", "card_id = " + id, null);
@@ -174,32 +176,28 @@ public class LocalSQL extends SQLiteOpenHelper {
 
                 addPhonesAddress(card, id);
 
-                Long nameId;
-                Long companyId;
+                Long nnameId;
+                Long ccompanyId;
 
                 String rawQuery = "SELECT name_id, compane_id FROM Card " +
                         " WHERE Card.id = " + id + ";";
                 Cursor cursor = db.rawQuery(rawQuery, null);
 
-                nameId = cursor.getLong(0);
-                companyId = cursor.getLong(1);
+                nnameId = cursor.getLong(0);
+                ccompanyId = cursor.getLong(1);
 
                 ContentValues cv = new ContentValues();
                 cv.put("first_name", card.getFirstName());
                 cv.put("last_name", card.getFirstName());
                 cv.put("patronymic", card.getFatherName());
 
-                db.update("Name", cv, "id = ?", new String[]{nameId.toString()});
+                db.update("Name", cv, "id = ?", new String[]{nnameId.toString()});
                 cv.clear();
 
                 cv.put("name", card.getCompanyName());
                 cv.put("type", card.getTypeOfOrganization());
-                db.update("Company", cv, "id = ?", new String[]{companyId.toString()});
+                db.update("Company", cv, "id = ?", new String[]{ccompanyId.toString()});
             } else {
-
-                long cardId;
-                long nameId;
-                long companyId;
 
                 ContentValues contentValuesList = new ContentValues();
                 contentValuesList.put("first_name", card.getFirstName());
@@ -215,12 +213,14 @@ public class LocalSQL extends SQLiteOpenHelper {
                 contentValuesList.clear();
                 contentValuesList.put("name_id", nameId);
                 contentValuesList.put("company_id", companyId);
+                contentValuesList.put("photo", card.getImage());
                 cardId = db.insert("Card", null, contentValuesList);
 
                 addPhonesAddress(card, cardId);
             }
+            return cardId;
         }
-        // //db.close();
+        return -1;
     }
 
     public Card getCard(long id) {

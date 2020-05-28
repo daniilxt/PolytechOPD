@@ -14,6 +14,7 @@ public class Card {
   private final HashSet<String> emails = new HashSet<>();
   private final HashSet<String> website = new HashSet<>();
   private final HashSet<String> officeAddress = new HashSet<>();
+  private String image;
 
   public Card() {
   }
@@ -24,6 +25,28 @@ public class Card {
 
   public void setId(long id) {
     this.id = id;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public HashSet<String> getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public Card(long id, String companyName, String firstName, String lastName, String fatherName, String typeOfOrganization, String image) {
+    this.id = id;
+    this.companyName = companyName;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.fatherName = fatherName;
+    this.typeOfOrganization = typeOfOrganization;
+    this.image = image;
   }
 
   public Card(String companyName, String firstName, String lastName, String fatherName, String typeOfOrganization) {

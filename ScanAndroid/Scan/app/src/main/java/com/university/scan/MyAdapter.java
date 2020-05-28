@@ -2,6 +2,7 @@ package com.university.scan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.university.scan.SQL.LocalSQL;
 import com.university.scan.SQL.Record;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -176,6 +178,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             myText1.setText(record.getFirstName());
             myText2.setText(record.getLastName());
             company.setText(record.getCompanyName());
+            myImage.setImageURI(Uri.parse(record.getImage()));
         }
     }
 }

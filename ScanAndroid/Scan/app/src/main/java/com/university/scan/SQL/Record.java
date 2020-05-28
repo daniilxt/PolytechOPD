@@ -13,6 +13,28 @@ public class Record {
     private String emails;
     private String website;
     private String officeAddress;
+    private String image;
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Record(long id, String companyName, String firstName, String lastName, String fatherName, String phoneNumber, String emails, String website, String officeAddress, String image) {
+        this.id = id;
+        this.companyName = companyName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fatherName = fatherName;
+        this.phoneNumber = phoneNumber;
+        this.emails = emails;
+        this.website = website;
+        this.officeAddress = officeAddress;
+        this.image = image;
+    }
 
     public Record(long id, String companyName, String firstName, String lastName,
                   String fatherName, String phoneNumber, String emails, String website, String officeAddress) {
