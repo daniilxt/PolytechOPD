@@ -26,6 +26,7 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.university.scan.SQL.LocalSQL;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static final int REQUEST_TAKE_PHOTO = 1;
 
     DataBase dataBase = new DataBase();
+    LocalSQL sql;
 
 //    List<String> s1 = new ArrayList<String>();
 //    List<String> s2 = new ArrayList<String>();
@@ -109,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        images.add(R.drawable.typescript);
 //        images.add(R.drawable.visual_studio);
 
-
-        myAdapter = new MyAdapter(this, dataBase);
+        sql = new LocalSQL(MainActivity.this);
+        myAdapter = new MyAdapter(this, sql);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -150,7 +152,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //s1 = dataBase.s1;
                             //s2 = dataBase.s2;
                             //images = dataBase.images;
-                            myAdapter.insert(delData, position);
+                            //myAdapter.insert(delData, position);
+
                             myAdapter.notifyItemInserted(position);
                         }
                     }).show();

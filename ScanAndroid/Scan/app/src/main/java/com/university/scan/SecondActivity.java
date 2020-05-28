@@ -136,43 +136,43 @@ public class SecondActivity extends AppCompatActivity {
                 card.setCompanyName(ETCompany.getText().toString());
 
                 if(!isEmpty(ETAddress1)) {
-                    card.addOfficeAddress(ETAddress1.getText().toString());
+                    card.setOfficeAddress(ETAddress1.getText().toString());
                 }
                 if(!isEmpty(ETAddress2)) {
-                    card.addOfficeAddress(ETAddress2.getText().toString());
+                    card.setOfficeAddress(ETAddress2.getText().toString());
                 }
                 if(!isEmpty(ETAddress3)) {
-                    card.addOfficeAddress(ETAddress3.getText().toString());
+                    card.setOfficeAddress(ETAddress3.getText().toString());
                 }
 
                 if(!isEmpty(ETEmail1)) {
-                    card.addEmail(ETEmail1.getText().toString());
+                    card.setEmails(ETEmail1.getText().toString());
                 }
                 if(!isEmpty(ETEmail2)) {
-                    card.addEmail(ETEmail2.getText().toString());
+                    card.setEmails(ETEmail2.getText().toString());
                 }
                 if(!isEmpty(ETEmail3)) {
-                    card.addEmail(ETEmail3.getText().toString());
+                    card.setEmails(ETEmail3.getText().toString());
                 }
 
                 if(!isEmpty(ETPhone1)) {
-                    card.addPhoneNumber(ETPhone1.getText().toString());
+                    card.setPhoneNumber(ETPhone1.getText().toString());
                 }
                 if(!isEmpty(ETPhone2)) {
-                    card.addPhoneNumber(ETPhone2.getText().toString());
+                    card.setPhoneNumber(ETPhone2.getText().toString());
                 }
                 if(!isEmpty(ETPhone3)) {
-                    card.addPhoneNumber(ETPhone3.getText().toString());
+                    card.setPhoneNumber(ETPhone3.getText().toString());
                 }
 
                 if(!isEmpty(ETSite1)) {
-                    card.addOfficeAddress(ETSite1.getText().toString());
+                    card.setOfficeAddress(ETSite1.getText().toString());
                 }
                 if(!isEmpty(ETSite2)) {
-                    card.addOfficeAddress(ETSite2.getText().toString());
+                    card.setOfficeAddress(ETSite2.getText().toString());
                 }
                 if(!isEmpty(ETSite3)) {
-                    card.addOfficeAddress(ETSite3.getText().toString());
+                    card.setOfficeAddress(ETSite3.getText().toString());
                 }
             }
         });

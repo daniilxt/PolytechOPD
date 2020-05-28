@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.university.scan.SQL.LocalSQL;
+import com.university.scan.SQL.Record;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,16 +33,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     List<Integer> fil;
     Context context;
     int count = 0;
+    private LocalSQL sql;
 
-    public MyAdapter(Context ct, DataBase db){
+    private List<Record> records;
+
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Record record);
+    }
+
+    public MyAdapter(Context ct, LocalSQL sql){
         context = ct;
-        dataBase = db;
-        data1All = dataBase.getS1();
-        data2All = dataBase.getS2();
-        imagesAll = dataBase.getImages();
-        //data1 = new ArrayList<>(db.getS1());
-        //data2 = new ArrayList<>(db.getS2());
-        //images = new ArrayList<>(db.getImages());
+        this.sql = sql;
+
+        this.records = sql.getRecords();
         fil = new ArrayList<Integer>();
     }
 
@@ -48,20 +56,48 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         System.out.println(data2);
     }*/
 
-    public void remove(int position){
-        //data1.remove(position);
-        //data2.remove(position);
-        //images.remove(position);
-        dataBase.delete(position);
-        //print();
+
+    @Override
+    public void onBindViewHolder(MyViewHolder viewHolder, int i) {
+        viewHolder.bind(records.get(i));
+
     }
 
-    public void insert(Container cont, int position){
-        //data1.add(position, cont.getString1());
-        //data2.add(position, cont.getString2());
-        //images.add(position, cont.getImage());
-        dataBase.insert(position, cont.getString1(), cont.getString2(), cont.getImage());
+    public void setItems(Collection<Record> records) {
+        records.addAll(records);
+        notifyDataSetChanged();
     }
+
+    public void clearItems() {
+        records.clear();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return records.size();
+    }
+
+    public void remove(int position) {
+        Record record = records.remove(position);
+        sql.deleteCard(record.getId());
+        notifyItemRemoved(position);
+    }
+
+//    public void remove(int position){
+//        //data1.remove(position);
+//        //data2.remove(position);
+//        //images.remove(position);
+//        dataBase.delete(position);
+//        //print();
+//    }
+//
+//    public void insert(Container cont, int position){
+//        //data1.add(position, cont.getString1());
+//        //data2.add(position, cont.getString2());
+//        //images.add(position, cont.getImage());
+//        dataBase.insert(position, cont.getString1(), cont.getString2(), cont.getImage());
+//    }
 
     @NonNull
     @Override
@@ -69,36 +105,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_row, parent, false);
         return new MyViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        Container con = dataBase.getItem(position);
-        holder.myText1.setText(con.getString1());
-        holder.myText2.setText(con.getString2());
-        holder.myImage.setImageResource(con.getImage());
-
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println(holder.getAdapterPosition());
-                int pos = holder.getAdapterPosition();
-                Container con = dataBase.getItem(pos);
-
-                System.out.println("clicked " + position + " " + con.getString1());
-                System.out.println("database: " + dataBase.getS1());
-                Intent intent = new Intent(context, SecondActivity.class);
-                intent.putExtra("data1",con.getString1());
-                intent.putExtra("data2",con.getString2());
-                intent.putExtra("myImage",con.getImage());
-                context.startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataBase.getS1().size();
     }
 
     @Override
@@ -153,16 +159,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView myText1, myText2;
+        TextView myText1, myText2, company;
         ImageView myImage;
         ConstraintLayout mainLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            myText1 = itemView.findViewById(R.id.myText1);
-            myText2 = itemView.findViewById(R.id.myText2);
+            myText1 = itemView.findViewById(R.id.firstName);
+            myText2 = itemView.findViewById(R.id.lastName);
+            company = itemView.findViewById(R.id.company);
             myImage = itemView.findViewById(R.id.myImageView);
             mainLayout = itemView.findViewById(R.id.mainLayout);
+        }
+
+        public void bind(Record record) {
+            myText1.setText(record.getFirstName());
+            myText2.setText(record.getLastName());
+            company.setText(record.getCompanyName());
         }
     }
 }

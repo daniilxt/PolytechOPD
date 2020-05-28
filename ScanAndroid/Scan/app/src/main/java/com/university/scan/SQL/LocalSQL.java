@@ -104,11 +104,59 @@ public class LocalSQL extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for (String table: TABLE_NAME_ARRAY) {
+        for (String table : TABLE_NAME_ARRAY) {
             db.execSQL("DROP TABLE IF EXISTS " + table);
         }
 
         onCreate(db);
+    }
+    private void addPhonesAddress(Card card, long cardId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValuesList = new ContentValues();
+        for (String phone : card.getPhoneNumbers()) {
+            contentValuesList.clear();
+            contentValuesList.put("phone", phone);
+            long phoneId = db.insert("Phone", null, contentValuesList);
+
+            contentValuesList.clear();
+            contentValuesList.put("card_id", cardId);
+            contentValuesList.put("phone_id", phoneId);
+            db.insert("CardPhone", null, contentValuesList);
+        }
+
+        for (String email : card.getEmails()) {
+            contentValuesList.clear();
+            contentValuesList.put("email", email);
+            long emailId = db.insert("Email", null, contentValuesList);
+
+            contentValuesList.clear();
+            contentValuesList.put("card_id", cardId);
+            contentValuesList.put("email_id", emailId);
+            db.insert("CardEmail", null, contentValuesList);
+        }
+
+        for (String site : card.getWebsite()) {
+            contentValuesList.clear();
+            contentValuesList.put("site", site);
+            long webSiteId = db.insert("Phone", null, contentValuesList);
+
+            contentValuesList.clear();
+            contentValuesList.put("card_id", cardId);
+            contentValuesList.put("website_id", webSiteId);
+            db.insert("CardWebSite", null, contentValuesList);
+        }
+
+        for (String adress : card.getOfficeAddress()) {
+            contentValuesList.clear();
+            contentValuesList.put("address", adress);
+            long addressId = db.insert("Address", null, contentValuesList);
+
+            contentValuesList.clear();
+            contentValuesList.put("card_id", cardId);
+            contentValuesList.put("website_id", addressId);
+            db.insert("CardAddress", null, contentValuesList);
+        }
     }
 
     public void addCard(Card card) {
@@ -117,76 +165,57 @@ public class LocalSQL extends SQLiteOpenHelper {
         if (db != null) {
             long id = card.getId();
             if (id != -1) {
-               db.delete("CardWebSite", "card_id = " + id, null);
-               db.delete("CardAddress", "card_id = " + id, null);
-               db.delete("CardPhone", "card_id = " + id, null);
-               db.delete("CardEmail", "card_id = " + id, null);
+                db.delete("CardWebSite", "card_id = " + id, null);
+                db.delete("CardAddress", "card_id = " + id, null);
+                db.delete("CardPhone", "card_id = " + id, null);
+                db.delete("CardEmail", "card_id = " + id, null);
 
-               db.update();
-            }
+                addPhonesAddress(card, id);
 
-            long cardId;
-            long nameId;
-            long companyId;
+                Long nameId;
+                Long companyId;
 
-            ContentValues contentValuesList = new ContentValues();
-            contentValuesList.put("first_name", card.getFirstName());
-            contentValuesList.put("last_name", card.getFirstName());
-            contentValuesList.put("patronymic", card.getFatherName());
-            nameId = db.insert("Name", null, contentValuesList);
+                String rawQuery = "SELECT name_id, compane_id FROM Card " +
+                        " WHERE Card.id = " + id + ";";
+                Cursor cursor = db.rawQuery(rawQuery, null);
 
-            contentValuesList.clear();
-            contentValuesList.put("name", card.getCompanyName());
-            contentValuesList.put("type", card.getTypeOfOrganization());
-            companyId = db.insert("Company", null, contentValuesList);
+                nameId = cursor.getLong(0);
+                companyId = cursor.getLong(1);
 
-            contentValuesList.clear();
-            contentValuesList.put("name_id", nameId);
-            contentValuesList.put("company_id", companyId);
-            cardId = db.insert("Card", null, contentValuesList);
+                ContentValues cv = new ContentValues();
+                cv.put("first_name", card.getFirstName());
+                cv.put("last_name", card.getFirstName());
+                cv.put("patronymic", card.getFatherName());
 
-            for (String phone : card.getPhoneNumbers()) {
-                contentValuesList.clear();
-                contentValuesList.put("phone", phone);
-                long phoneId = db.insert("Phone", null, contentValuesList);
+                db.update("Name", cv, "id = ?", new String[]{nameId.toString()});
+                cv.clear();
 
-                contentValuesList.clear();
-                contentValuesList.put("card_id", cardId);
-                contentValuesList.put("phone_id", phoneId);
-                db.insert("CardPhone", null, contentValuesList);
-            }
+                cv.put("name", card.getCompanyName());
+                cv.put("type", card.getTypeOfOrganization());
+                db.update("Company", cv, "id = ?", new String[]{companyId.toString()});
+            } else {
 
-            for (String email : card.getEmails()) {
-                contentValuesList.clear();
-                contentValuesList.put("email", email);
-                long emailId = db.insert("Email", null, contentValuesList);
+                long cardId;
+                long nameId;
+                long companyId;
+
+                ContentValues contentValuesList = new ContentValues();
+                contentValuesList.put("first_name", card.getFirstName());
+                contentValuesList.put("last_name", card.getFirstName());
+                contentValuesList.put("patronymic", card.getFatherName());
+                nameId = db.insert("Name", null, contentValuesList);
 
                 contentValuesList.clear();
-                contentValuesList.put("card_id", cardId);
-                contentValuesList.put("email_id", emailId);
-                db.insert("CardEmail", null, contentValuesList);
-            }
-
-            for (String site : card.getWebsite()) {
-                contentValuesList.clear();
-                contentValuesList.put("site", site);
-                long webSiteId = db.insert("Phone", null, contentValuesList);
+                contentValuesList.put("name", card.getCompanyName());
+                contentValuesList.put("type", card.getTypeOfOrganization());
+                companyId = db.insert("Company", null, contentValuesList);
 
                 contentValuesList.clear();
-                contentValuesList.put("card_id", cardId);
-                contentValuesList.put("website_id", webSiteId);
-                db.insert("CardWebSite", null, contentValuesList);
-            }
+                contentValuesList.put("name_id", nameId);
+                contentValuesList.put("company_id", companyId);
+                cardId = db.insert("Card", null, contentValuesList);
 
-            for (String adress : card.getOfficeAddress()) {
-                contentValuesList.clear();
-                contentValuesList.put("address", adress);
-                long addressId = db.insert("Address", null, contentValuesList);
-
-                contentValuesList.clear();
-                contentValuesList.put("card_id", cardId);
-                contentValuesList.put("website_id", addressId);
-                db.insert("CardAddress", null, contentValuesList);
+                addPhonesAddress(card, cardId);
             }
         }
         db.close();
@@ -205,7 +234,7 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             if (cursor.moveToFirst()) {
                 do {
-                    card.addWebsite(cursor.getString(0));
+                    card.setWebsite(cursor.getString(0));
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -216,7 +245,7 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             if (cursorPhone.moveToFirst()) {
                 do {
-                    card.addPhoneNumber(cursorPhone.getString(0));
+                    card.setPhoneNumber(cursorPhone.getString(0));
                 } while (cursorPhone.moveToNext());
             }
             cursorPhone.close();
@@ -227,7 +256,7 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             if (cursorAddress.moveToFirst()) {
                 do {
-                    card.addOfficeAddress(cursorAddress.getString(0));
+                    card.setOfficeAddress(cursorAddress.getString(0));
                 } while (cursorAddress.moveToNext());
             }
             cursorAddress.close();
@@ -250,7 +279,7 @@ public class LocalSQL extends SQLiteOpenHelper {
         return card;
     }
 
-    private List<Record> getRecords() {
+    public List<Record> getRecords() {
         SQLiteDatabase db = this.getReadableDatabase();
         Card card;
 
@@ -418,9 +447,9 @@ public class LocalSQL extends SQLiteOpenHelper {
     private String getFirstElemFromHashSet(HashSet<String> hashSet) {
         Iterator<String> iterator = hashSet.iterator();
 
-        if(iterator.hasNext()){
+        if (iterator.hasNext()) {
             return iterator.next();
-        }else{
+        } else {
             return "";
         }
     }
