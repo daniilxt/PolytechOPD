@@ -2,6 +2,7 @@ package com.university.scan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -71,22 +72,22 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        ETLastName= findViewById(R.id.ETLastName);
-        ETFirstName= findViewById(R.id.ETFirstName);
-        ETFatherName= findViewById(R.id.ETFatherName);
-        ETCompany= findViewById(R.id.ETCompany);
-        ETPhone1= findViewById(R.id.ETPhone1);
-        ETPhone2= findViewById(R.id.ETPhone2);
-        ETPhone3= findViewById(R.id.ETPhone3);
-        ETEmail1= findViewById(R.id.ETEmail1);
-        ETEmail2= findViewById(R.id.ETEmail2);
-        ETEmail3= findViewById(R.id.ETEmail3);
-        ETAddress1= findViewById(R.id.ETAddress1);
-        ETAddress2= findViewById(R.id.ETAddress2);
-        ETAddress3= findViewById(R.id.ETAddress3);
-        ETSite1= findViewById(R.id.ETSite1);
-        ETSite2= findViewById(R.id.ETSite2);
-        ETSite3= findViewById(R.id.ETSite3);
+        ETLastName = findViewById(R.id.ETLastName);
+        ETFirstName = findViewById(R.id.ETFirstName);
+        ETFatherName = findViewById(R.id.ETFatherName);
+        ETCompany = findViewById(R.id.ETCompany);
+        ETPhone1 = findViewById(R.id.ETPhone1);
+        ETPhone2 = findViewById(R.id.ETPhone2);
+        ETPhone3 = findViewById(R.id.ETPhone3);
+        ETEmail1 = findViewById(R.id.ETEmail1);
+        ETEmail2 = findViewById(R.id.ETEmail2);
+        ETEmail3 = findViewById(R.id.ETEmail3);
+        ETAddress1 = findViewById(R.id.ETAddress1);
+        ETAddress2 = findViewById(R.id.ETAddress2);
+        ETAddress3 = findViewById(R.id.ETAddress3);
+        ETSite1 = findViewById(R.id.ETSite1);
+        ETSite2 = findViewById(R.id.ETSite2);
+        ETSite3 = findViewById(R.id.ETSite3);
 
         mainImageView = findViewById(R.id.mainImageView);
         TRPhone2 = findViewById(R.id.TRPhone2);
@@ -105,145 +106,151 @@ public class SecondActivity extends AppCompatActivity {
         BDelEmail = findViewById(R.id.BDelEmail);
         BAddSite = findViewById(R.id.BAddSite);
         BDelSite = findViewById(R.id.BDelSite);
-        floatingActionButton2= findViewById(R.id.floatingActionButton2);
+        floatingActionButton2 = findViewById(R.id.floatingActionButton2);
 
         openedPhones = 0;
         openedAddresses = 0;
         openedEmails = 0;
         openedSites = 0;
 
+        while (StaticVar.var == -1) {
+
+        }
+
         sql = new LocalSQL(SecondActivity.this);
 
-        //long id = getIntent().getLongExtra("id", 1);
-        long id = -1;
+        long id  = getIntent().getLongExtra("key", 0);
+
+//        Toast toast = Toast.makeText(getApplicationContext(),
+//                idString, Toast.LENGTH_SHORT);
+//        toast.show();
+
         Card card = sql.getCard(id);
-        if (id != -1) {
-            ETFirstName.setText(card.getFirstName());
-            ETLastName.setText(card.getLastName());
-            ETFatherName.setText(card.getFatherName());
-            ETCompany.setText(card.getCompanyName());
 
-            if (card.getPhoneNumbers().size() != 0) {
-                openedPhones = card.getPhoneNumbers().size() - 1;
-                checkPhones();
+        ETFirstName.setText(card.getFirstName().trim());
+        ETLastName.setText(card.getLastName().trim());
+        ETFatherName.setText(card.getFatherName().trim());
+        ETCompany.setText(card.getCompanyName().trim());
 
-                Iterator<String> iterator = card.getPhoneNumbers().iterator();
+        if (card.getPhoneNumbers().size() != 0) {
+            openedPhones = card.getPhoneNumbers().size() - 1;
+            checkPhones();
 
-                List<String> iterators = new ArrayList<>();
-                while (iterator.hasNext()) {
-                    iterators.add(iterator.next());
-                }
+            Iterator<String> iterator = card.getPhoneNumbers().iterator();
 
-                switch (openedPhones) {
-                    case 0: {
-                        ETPhone1.setText(iterators.get(0));
-                        break;
-                    }
-                    case 1: {
-                        ETPhone1.setText(iterators.get(0));
-                        ETPhone2.setText(iterators.get(1));
-                        break;
-                    }
-                    case 2: {
-                        ETPhone1.setText(iterators.get(0));
-                        ETPhone2.setText(iterators.get(1));
-                        ETPhone3.setText(iterators.get(2));
-                        break;
-                    }
-                }
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
             }
 
-            if (card.getWebsite().size() != 0) {
-                openedSites = card.getWebsite().size() - 1;
-                checkSites();
-
-                Iterator<String> iterator = card.getWebsite().iterator();
-
-                List<String> iterators = new ArrayList<>();
-                while (iterator.hasNext()) {
-                    iterators.add(iterator.next());
+            switch (openedPhones) {
+                case 0: {
+                    ETPhone1.setText(iterators.get(0));
+                    break;
                 }
-
-                switch (openedSites) {
-                    case 0: {
-                        ETSite1.setText(iterators.get(0));
-                        break;
-                    }
-                    case 1: {
-                        ETSite1.setText(iterators.get(0));
-                        ETSite2.setText(iterators.get(1));
-                        break;
-                    }
-                    case 2: {
-                        ETSite1.setText(iterators.get(0));
-                        ETSite2.setText(iterators.get(1));
-                        ETSite3.setText(iterators.get(2));
-                        break;
-                    }
+                case 1: {
+                    ETPhone1.setText(iterators.get(0));
+                    ETPhone2.setText(iterators.get(1));
+                    break;
                 }
-            }
-
-            if (card.getOfficeAddress().size() != 0) {
-                openedAddresses = card.getOfficeAddress().size() - 1;
-                checkAddress();
-
-                Iterator<String> iterator = card.getEmails().iterator();
-
-                List<String> iterators = new ArrayList<>();
-                while (iterator.hasNext()) {
-                    iterators.add(iterator.next());
-                }
-
-                switch (openedAddresses) {
-                    case 0: {
-                        ETAddress1.setText(iterators.get(0));
-                        break;
-                    }
-                    case 1: {
-                        ETAddress1.setText(iterators.get(0));
-                        ETAddress2.setText(iterators.get(1));
-                        break;
-                    }
-                    case 2: {
-                        ETAddress1.setText(iterators.get(0));
-                        ETAddress2.setText(iterators.get(1));
-                        ETAddress3.setText(iterators.get(2));
-                        break;
-                    }
-                }
-            }
-
-            if (card.getEmails().size() != 0) {
-                openedEmails = card.getEmails().size() - 1;
-                checkEmails();
-
-                Iterator<String> iterator = card.getEmails().iterator();
-
-                List<String> iterators = new ArrayList<>();
-                while (iterator.hasNext()) {
-                    iterators.add(iterator.next());
-                }
-
-                switch (openedEmails) {
-                    case 0: {
-                        ETEmail1.setText(iterators.get(0));
-                        break;
-                    }
-                    case 1: {
-                        ETEmail1.setText(iterators.get(0));
-                        ETEmail2.setText(iterators.get(1));
-                        break;
-                    }
-                    case 2: {
-                        ETEmail1.setText(iterators.get(0));
-                        ETEmail2.setText(iterators.get(1));
-                        ETEmail3.setText(iterators.get(2));
-                        break;
-                    }
+                case 2: {
+                    ETPhone1.setText(iterators.get(0));
+                    ETPhone2.setText(iterators.get(1));
+                    ETPhone3.setText(iterators.get(2));
+                    break;
                 }
             }
         }
 
+        if (card.getWebsite().size() != 0) {
+            openedSites = card.getWebsite().size() - 1;
+            checkSites();
+
+            Iterator<String> iterator = card.getWebsite().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedSites) {
+                case 0: {
+                    ETSite1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETSite1.setText(iterators.get(0));
+                    ETSite2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETSite1.setText(iterators.get(0));
+                    ETSite2.setText(iterators.get(1));
+                    ETSite3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
+
+        if (card.getOfficeAddress().size() != 0) {
+            openedAddresses = card.getOfficeAddress().size() - 1;
+            checkAddress();
+
+            Iterator<String> iterator = card.getEmails().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedAddresses) {
+                case 0: {
+                    ETAddress1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETAddress1.setText(iterators.get(0));
+                    ETAddress2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETAddress1.setText(iterators.get(0));
+                    ETAddress2.setText(iterators.get(1));
+                    ETAddress3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
+
+        if (card.getEmails().size() != 0) {
+            openedEmails = card.getEmails().size() - 1;
+            checkEmails();
+
+            Iterator<String> iterator = card.getEmails().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedEmails) {
+                case 0: {
+                    ETEmail1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETEmail1.setText(iterators.get(0));
+                    ETEmail2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETEmail1.setText(iterators.get(0));
+                    ETEmail2.setText(iterators.get(1));
+                    ETEmail3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
 
 
         TRPhone2.setEnabled(false);
@@ -268,48 +275,55 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Card card = new Card();
 
+                if (isEmpty(ETFirstName) || isEmpty(ETLastName) || isEmpty(ETFatherName) || isEmpty(ETCompany)) {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Please entry all fields", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
+
                 card.setFirstName(ETFirstName.getText().toString());
                 card.setLastName(ETLastName.getText().toString());
                 card.setFatherName(ETFatherName.getText().toString());
                 card.setCompanyName(ETCompany.getText().toString());
 
-                if(!isEmpty(ETAddress1)) {
+                if (!isEmpty(ETAddress1)) {
                     card.setOfficeAddress(ETAddress1.getText().toString());
                 }
-                if(!isEmpty(ETAddress2)) {
+                if (!isEmpty(ETAddress2)) {
                     card.setOfficeAddress(ETAddress2.getText().toString());
                 }
-                if(!isEmpty(ETAddress3)) {
+                if (!isEmpty(ETAddress3)) {
                     card.setOfficeAddress(ETAddress3.getText().toString());
                 }
 
-                if(!isEmpty(ETEmail1)) {
+                if (!isEmpty(ETEmail1)) {
                     card.setEmails(ETEmail1.getText().toString());
                 }
-                if(!isEmpty(ETEmail2)) {
+                if (!isEmpty(ETEmail2)) {
                     card.setEmails(ETEmail2.getText().toString());
                 }
-                if(!isEmpty(ETEmail3)) {
+                if (!isEmpty(ETEmail3)) {
                     card.setEmails(ETEmail3.getText().toString());
                 }
 
-                if(!isEmpty(ETPhone1)) {
+                if (!isEmpty(ETPhone1)) {
                     card.setPhoneNumber(ETPhone1.getText().toString());
                 }
-                if(!isEmpty(ETPhone2)) {
+                if (!isEmpty(ETPhone2)) {
                     card.setPhoneNumber(ETPhone2.getText().toString());
                 }
-                if(!isEmpty(ETPhone3)) {
+                if (!isEmpty(ETPhone3)) {
                     card.setPhoneNumber(ETPhone3.getText().toString());
                 }
 
-                if(!isEmpty(ETSite1)) {
+                if (!isEmpty(ETSite1)) {
                     card.setOfficeAddress(ETSite1.getText().toString());
                 }
-                if(!isEmpty(ETSite2)) {
+                if (!isEmpty(ETSite2)) {
                     card.setOfficeAddress(ETSite2.getText().toString());
                 }
-                if(!isEmpty(ETSite3)) {
+                if (!isEmpty(ETSite3)) {
                     card.setOfficeAddress(ETSite3.getText().toString());
                 }
             }
@@ -571,8 +585,8 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
-        getData();
-        setData();
+        //getData();
+       // setData();
     }
 
     private void checkSites() {
@@ -693,7 +707,7 @@ public class SecondActivity extends AppCompatActivity {
             data1 = getIntent().getStringExtra("data1");
             data2 = getIntent().getStringExtra("data2");
             myImage = getIntent().getIntExtra("myImage", 1);
-        }else{
+        } else {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
         }
     }

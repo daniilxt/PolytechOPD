@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,7 +22,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,12 +38,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import Parsers.Card;
 import Parsers.MainTesseract;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -55,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String currentPhotoPath;
     private static int TAKE_PICTURE_REQUEST = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
+    SharedPreferences sharedpreferences;
 
     DataBase dataBase = new DataBase();
     LocalSQL sql;
@@ -245,6 +254,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 thread.start();
                 System.out.println("Path is" + currentPhotoPath);
                 //
+                StaticVar.var = -1;
+
                 Intent intent = new Intent(this, SecondActivity.class);
                 intent.putExtra("outputFileUri", outputFileUri);
                 startActivity(intent);
@@ -480,5 +491,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void runTesseractParser(String[] arr) {
         tessractParser.startParser(arr);
+        ArrayList<Card> cardsArray =
+                tessractParser.getCardsArray();
+
+        Card card = cardsArray.get(cardsArray.size() -1);
+        card.setImage(currentPhotoPath);
+        card.showCardInfo();
+
+        card.setFirstName("adasd");
+        long id = sql.addCard(card);
+
+        StaticVar.var = id;
+
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 }
