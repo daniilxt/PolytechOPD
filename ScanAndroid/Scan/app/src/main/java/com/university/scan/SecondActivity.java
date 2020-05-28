@@ -80,7 +80,7 @@ public class SecondActivity extends AppCompatActivity {
         //long id = getIntent().getLongExtra("id", 1);
         long id = -1;
         Card card = sql.getCard(id);
-        if (card != null) {
+        if (id != -1) {
             ETFirstName.setText(card.getFirstName());
             ETLastName.setText(card.getLastName());
             ETFatherName.setText(card.getFatherName());
