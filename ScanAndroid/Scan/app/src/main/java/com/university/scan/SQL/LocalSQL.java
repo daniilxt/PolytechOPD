@@ -48,7 +48,7 @@ public class LocalSQL extends SQLiteOpenHelper {
                     ");\n",
             "create table [Email](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
-                    "  [email] NVARCHAR, \n" +
+                    "  [email] NVARCHAR \n" +
                     ");\n",
             "create table [WebSite](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
