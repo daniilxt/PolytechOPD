@@ -250,6 +250,7 @@ public class LocalSQL extends SQLiteOpenHelper {
                     card.setPhoneNumber(cursorPhone.getString(0));
                 } while (cursorPhone.moveToNext());
             }
+
             cursorPhone.close();
 
             String rawQueryAddress = "SELECT address FROM Address INNER JOIN CardAddress " +

@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.university.scan.SQL.LocalSQL;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import Parsers.Card;
 
 public class SecondActivity extends AppCompatActivity {
@@ -66,12 +70,142 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        sql = new LocalSQL(SecondActivity.this);
-
         openedPhones = 0;
         openedAddresses = 0;
         openedEmails = 0;
         openedSites = 0;
+
+        sql = new LocalSQL(SecondActivity.this);
+
+        //long id = getIntent().getLongExtra("id", 1);
+        long id = -1;
+        Card card = sql.getCard(id);
+        if (card != null) {
+            ETFirstName.setText(card.getFirstName());
+            ETLastName.setText(card.getLastName());
+            ETFatherName.setText(card.getFatherName());
+            ETCompany.setText(card.getCompanyName());
+
+            if (card.getPhoneNumbers().size() != 0) {
+                openedPhones = card.getPhoneNumbers().size() - 1;
+                checkPhones();
+
+                Iterator<String> iterator = card.getPhoneNumbers().iterator();
+
+                List<String> iterators = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    iterators.add(iterator.next());
+                }
+
+                switch (openedPhones) {
+                    case 0: {
+                        ETPhone1.setText(iterators.get(0));
+                        break;
+                    }
+                    case 1: {
+                        ETPhone1.setText(iterators.get(0));
+                        ETPhone2.setText(iterators.get(1));
+                        break;
+                    }
+                    case 2: {
+                        ETPhone1.setText(iterators.get(0));
+                        ETPhone2.setText(iterators.get(1));
+                        ETPhone3.setText(iterators.get(2));
+                        break;
+                    }
+                }
+            }
+
+            if (card.getWebsite().size() != 0) {
+                openedSites = card.getWebsite().size() - 1;
+                checkSites();
+
+                Iterator<String> iterator = card.getWebsite().iterator();
+
+                List<String> iterators = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    iterators.add(iterator.next());
+                }
+
+                switch (openedSites) {
+                    case 0: {
+                        ETSite1.setText(iterators.get(0));
+                        break;
+                    }
+                    case 1: {
+                        ETSite1.setText(iterators.get(0));
+                        ETSite2.setText(iterators.get(1));
+                        break;
+                    }
+                    case 2: {
+                        ETSite1.setText(iterators.get(0));
+                        ETSite2.setText(iterators.get(1));
+                        ETSite3.setText(iterators.get(2));
+                        break;
+                    }
+                }
+            }
+
+            if (card.getOfficeAddress().size() != 0) {
+                openedAddresses = card.getOfficeAddress().size() - 1;
+                checkAddress();
+
+                Iterator<String> iterator = card.getEmails().iterator();
+
+                List<String> iterators = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    iterators.add(iterator.next());
+                }
+
+                switch (openedAddresses) {
+                    case 0: {
+                        ETAddress1.setText(iterators.get(0));
+                        break;
+                    }
+                    case 1: {
+                        ETAddress1.setText(iterators.get(0));
+                        ETAddress2.setText(iterators.get(1));
+                        break;
+                    }
+                    case 2: {
+                        ETAddress1.setText(iterators.get(0));
+                        ETAddress2.setText(iterators.get(1));
+                        ETAddress3.setText(iterators.get(2));
+                        break;
+                    }
+                }
+            }
+
+            if (card.getEmails().size() != 0) {
+                openedEmails = card.getEmails().size() - 1;
+                checkEmails();
+
+                Iterator<String> iterator = card.getEmails().iterator();
+
+                List<String> iterators = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    iterators.add(iterator.next());
+                }
+
+                switch (openedEmails) {
+                    case 0: {
+                        ETEmail1.setText(iterators.get(0));
+                        break;
+                    }
+                    case 1: {
+                        ETEmail1.setText(iterators.get(0));
+                        ETEmail2.setText(iterators.get(1));
+                        break;
+                    }
+                    case 2: {
+                        ETEmail1.setText(iterators.get(0));
+                        ETEmail2.setText(iterators.get(1));
+                        ETEmail3.setText(iterators.get(2));
+                        break;
+                    }
+                }
+            }
+        }
 
         ETLastName= findViewById(R.id.ETLastName);
         ETFirstName= findViewById(R.id.ETFirstName);
@@ -107,6 +241,7 @@ public class SecondActivity extends AppCompatActivity {
         BDelEmail = findViewById(R.id.BDelEmail);
         BAddSite = findViewById(R.id.BAddSite);
         BDelSite = findViewById(R.id.BDelSite);
+        floatingActionButton2= findViewById(R.id.floatingActionButton2);
 
         TRPhone2.setEnabled(false);
         TRPhone2.setVisibility(View.GONE);
@@ -435,7 +570,118 @@ public class SecondActivity extends AppCompatActivity {
 
         getData();
         setData();
+    }
 
+    private void checkSites() {
+        if (openedSites >= 0) {
+            switch (openedSites) {
+                case 0: {
+                    TRSite2.setEnabled(false);
+                    TRSite2.setVisibility(View.GONE);
+                    TRSite3.setEnabled(false);
+                    TRSite3.setVisibility(View.GONE);
+                    break;
+                }
+                case 1: {
+                    TRSite2.setEnabled(true);
+                    TRSite2.setVisibility(View.VISIBLE);
+                    TRSite3.setEnabled(false);
+                    TRSite3.setVisibility(View.GONE);
+                    break;
+                }
+                case 2: {
+                    TRSite2.setEnabled(true);
+                    TRSite2.setVisibility(View.VISIBLE);
+                    TRSite3.setEnabled(true);
+                    TRSite3.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkEmails() {
+        if (openedEmails >= 0) {
+            switch (openedEmails) {
+                case 0: {
+                    TREmail2.setEnabled(false);
+                    TREmail2.setVisibility(View.GONE);
+                    TREmail3.setEnabled(false);
+                    TREmail3.setVisibility(View.GONE);
+                    break;
+                }
+                case 1: {
+                    TREmail2.setEnabled(true);
+                    TREmail2.setVisibility(View.VISIBLE);
+                    TREmail3.setEnabled(false);
+                    TREmail3.setVisibility(View.GONE);
+                    break;
+                }
+                case 2: {
+                    TREmail2.setEnabled(true);
+                    TREmail2.setVisibility(View.VISIBLE);
+                    TREmail3.setEnabled(true);
+                    TREmail3.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkPhones() {
+        if (openedPhones >= 0) {
+            switch (openedPhones) {
+                case 0: {
+                    TRPhone2.setEnabled(false);
+                    TRPhone2.setVisibility(View.GONE);
+                    TRPhone3.setEnabled(false);
+                    TRPhone3.setVisibility(View.GONE);
+                    break;
+                }
+                case 1: {
+                    TRPhone2.setEnabled(true);
+                    TRPhone2.setVisibility(View.VISIBLE);
+                    TRPhone3.setEnabled(false);
+                    TRPhone3.setVisibility(View.GONE);
+                    break;
+                }
+                case 2: {
+                    TRPhone2.setEnabled(true);
+                    TRPhone2.setVisibility(View.VISIBLE);
+                    TRPhone3.setEnabled(true);
+                    TRPhone3.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkAddress() {
+        if (openedAddresses >= 0) {
+            switch (openedAddresses) {
+                case 0: {
+                    TRAddress2.setEnabled(false);
+                    TRAddress2.setVisibility(View.GONE);
+                    TRAddress3.setEnabled(false);
+                    TRAddress3.setVisibility(View.GONE);
+                    break;
+                }
+                case 1: {
+                    TRAddress2.setEnabled(true);
+                    TRAddress2.setVisibility(View.VISIBLE);
+                    TRAddress3.setEnabled(false);
+                    TRAddress3.setVisibility(View.GONE);
+                    break;
+                }
+                case 2: {
+                    TRAddress2.setEnabled(true);
+                    TRAddress2.setVisibility(View.VISIBLE);
+                    TRAddress3.setEnabled(true);
+                    TRAddress3.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+        }
     }
 
     private void getData() {
