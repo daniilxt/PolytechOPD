@@ -1,3 +1,4 @@
+/*
 package old;
 
 import java.io.File;
@@ -34,6 +35,7 @@ public class Main {
       e.printStackTrace();
     }
 
+*/
 /*
     //String str = "nullРАГУНДИ ||| Сергей Владимировичофис: СПб, ул. Новолитовская, д.15РСЗа Ул) пе еЕ УЖ,тай: 9227881 @тай.гиПЕРОМ итДее нете -у-жа о (Це) ДДТ МТОТА ЦИ [Ва Те И -2-ЯAMAH{1 1 Cepren Bnagumuposuyogpuc: CI6, yn. HoBonutosckasn, A.15moo: (921)591-21-14mai: 9227881 @mail.ruweb: www.cottages-stroy.ru www.full-houses.ru";
     //String str = "nullГ „В ! ПАРИКМАХЕРСКАЯ[, <УВ НАРОДНАЯВ. оао № мастер| с °8-981-806-98-96а” ул.Ушинского, д.33, корп.3у пёрз://мК.сот/подок!_йуа_пагодапн-пт: 10.00-21.00, сб-вс: 10.00-20.00be } NAPUKMAXEPCKAR0 HAPO/THASIei P MactepNWR 8-981-806-98-96£EV yn.YwuHckoro, 4.33, kopn.3i https:/ivk.com/nogotki_dlya_narodanu-nt: 10.00-21.00, c6-8¢: 10.00-20.00";
@@ -55,8 +57,10 @@ public class Main {
       System.out.println(address + "dfdfdfdfdf");
       //System.out.println(formatAddress(address.toString()));
 
-    }*/
+    }*//*
 
+
+*/
 /*    private static String formatAddress(String str) {
         String tmpStr = str.replaceAll(" ", "");
         StringBuilder formattedStr = new StringBuilder();
@@ -69,8 +73,10 @@ public class Main {
             formattedStr.append(i);
         }
         return formattedStr.toString();
-    }*/
+    }*//*
+
 
   }
 }
 
+*/

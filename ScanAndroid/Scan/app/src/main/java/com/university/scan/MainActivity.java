@@ -26,6 +26,7 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.googlecode.tesseract.android.TessBaseAPI;
 import com.university.scan.SQL.LocalSQL;
 
 import java.io.File;
@@ -36,7 +37,11 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import Parsers.MainTesseract;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -61,6 +66,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //List<String> s2 = dataBase.s2;
     //List<Integer> images = dataBase.images;
     Container delData = new Container();
+
+
+
+    // Tess fields
+    private MainTesseract tessractParser = new MainTesseract();
+    private static final String TAG = MainActivity.class.getSimpleName();
+    String TESS_DATA_PATH = "/storage/emulated/0/Android/data/com.university.scan/files/Documents/";
+    String TEST_DATA_PATH = "/storage/emulated/0/Android/data/com.university.scan/files/Pictures/vis23.jpg";
+    final String[] result = new String[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +239,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //imageView.setImageURI(outputFileUri);
                 System.out.println("picture taken!");
                 System.out.println(outputFileUri.getPath());
+
+                //
+                Thread thread = new Thread(new TessRun());
+                thread.start();
+                System.out.println("Path is" + currentPhotoPath);
+                //
                 Intent intent = new Intent(this, SecondActivity.class);
                 intent.putExtra("outputFileUri", outputFileUri);
                 startActivity(intent);
@@ -390,5 +410,75 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("tag", e.getMessage());
         }
 
+    }
+
+
+    private class TessRun implements Runnable {
+        @Override
+        public void run() {
+            System.out.println(TESS_DATA_PATH);
+            System.out.println("Path is: " + outputFileUri);
+            System.out.println("Path is: " + saveDir);
+
+            final CountDownLatch counter = new CountDownLatch(2);
+            long start = System.currentTimeMillis();
+            ExecutorService pool = Executors.newFixedThreadPool(2);
+            pool.submit(new Runnable() {
+                @Override
+                public void run() {
+                    //result[0] = extractText(TEST_DATA_PATH, "rus");
+                    result[0] = extractText(currentPhotoPath, "rus");
+                    counter.countDown();
+                }
+            });
+            pool.submit(new Runnable() {
+                @Override
+                public void run() {
+                    //  result[1] = extractText(TEST_DATA_PATH,"eng");
+                    result[1] = extractText(currentPhotoPath,"eng");
+                    counter.countDown();
+                }
+            });
+            try {
+                counter.await();
+                long stop = System.currentTimeMillis();
+                System.out.println("Time used:   "+ (stop-start)/1000);
+                runTesseractParser(result);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String extractText(final String dataPath, final String lang) {
+        TessBaseAPI tessBaseApi = null;
+        try {
+            tessBaseApi = new TessBaseAPI();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            if (tessBaseApi == null) {
+                Log.e(TAG, "TessBaseAPI is null. TessFactory not returning tess object.");
+            }
+        }
+
+        tessBaseApi.init(TESS_DATA_PATH, lang);
+        System.out.println("Extract part");
+
+        Log.d(TAG, "Training file loaded");
+        tessBaseApi.setImage(new File(dataPath));
+        System.out.println("Set good");
+        String extractedText = "empty result";
+        try {
+            extractedText = tessBaseApi.getUTF8Text();
+        } catch (Exception e) {
+            Log.e(TAG, "Error in recognizing text.");
+        }
+        tessBaseApi.end();
+        return extractedText;
+    }
+
+    private void runTesseractParser(String[] arr) {
+        tessractParser.startParser(arr);
     }
 }
