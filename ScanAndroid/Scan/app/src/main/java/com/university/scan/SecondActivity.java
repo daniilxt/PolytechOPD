@@ -11,6 +11,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.university.scan.SQL.LocalSQL;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class SecondActivity extends AppCompatActivity {
     Button BDelEmail;
     Button BAddSite;
     Button BDelSite;
-    Button floatingActionButton2;
+    FloatingActionButton floatingActionButton2;
     int openedPhones;
     int openedAddresses;
     int openedEmails;
@@ -69,6 +70,42 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+
+        ETLastName= findViewById(R.id.ETLastName);
+        ETFirstName= findViewById(R.id.ETFirstName);
+        ETFatherName= findViewById(R.id.ETFatherName);
+        ETCompany= findViewById(R.id.ETCompany);
+        ETPhone1= findViewById(R.id.ETPhone1);
+        ETPhone2= findViewById(R.id.ETPhone2);
+        ETPhone3= findViewById(R.id.ETPhone3);
+        ETEmail1= findViewById(R.id.ETEmail1);
+        ETEmail2= findViewById(R.id.ETEmail2);
+        ETEmail3= findViewById(R.id.ETEmail3);
+        ETAddress1= findViewById(R.id.ETAddress1);
+        ETAddress2= findViewById(R.id.ETAddress2);
+        ETAddress3= findViewById(R.id.ETAddress3);
+        ETSite1= findViewById(R.id.ETSite1);
+        ETSite2= findViewById(R.id.ETSite2);
+        ETSite3= findViewById(R.id.ETSite3);
+
+        mainImageView = findViewById(R.id.mainImageView);
+        TRPhone2 = findViewById(R.id.TRPhone2);
+        TRPhone3 = findViewById(R.id.TRPhone3);
+        TRAddress2 = findViewById(R.id.TRAddress2);
+        TRAddress3 = findViewById(R.id.TRAddress3);
+        TREmail2 = findViewById(R.id.TREmail2);
+        TREmail3 = findViewById(R.id.TREmail3);
+        TRSite2 = findViewById(R.id.TRSite2);
+        TRSite3 = findViewById(R.id.TRSite3);
+        BAddPhone = findViewById(R.id.BAddPhone);
+        BDelPhone = findViewById(R.id.BDelPhone);
+        BAddAddress = findViewById(R.id.BAddAddress);
+        BDelAddress = findViewById(R.id.BDelAddress);
+        BAddEmail = findViewById(R.id.BAddEmail);
+        BDelEmail = findViewById(R.id.BDelEmail);
+        BAddSite = findViewById(R.id.BAddSite);
+        BDelSite = findViewById(R.id.BDelSite);
+        floatingActionButton2= findViewById(R.id.floatingActionButton2);
 
         openedPhones = 0;
         openedAddresses = 0;
@@ -207,41 +244,7 @@ public class SecondActivity extends AppCompatActivity {
             }
         }
 
-        ETLastName= findViewById(R.id.ETLastName);
-        ETFirstName= findViewById(R.id.ETFirstName);
-        ETFatherName= findViewById(R.id.ETFatherName);
-        ETCompany= findViewById(R.id.ETCompany);
-        ETPhone1= findViewById(R.id.ETPhone1);
-        ETPhone2= findViewById(R.id.ETPhone2);
-        ETPhone3= findViewById(R.id.ETPhone3);
-        ETEmail1= findViewById(R.id.ETEmail1);
-        ETEmail2= findViewById(R.id.ETEmail2);
-        ETEmail3= findViewById(R.id.ETEmail3);
-        ETAddress1= findViewById(R.id.ETAddress1);
-        ETAddress2= findViewById(R.id.ETAddress2);
-        ETAddress3= findViewById(R.id.ETAddress3);
-        ETSite1= findViewById(R.id.ETSite1);
-        ETSite2= findViewById(R.id.ETSite2);
-        ETSite3= findViewById(R.id.ETSite3);
 
-        mainImageView = findViewById(R.id.mainImageView);
-        TRPhone2 = findViewById(R.id.TRPhone2);
-        TRPhone3 = findViewById(R.id.TRPhone3);
-        TRAddress2 = findViewById(R.id.TRAddress2);
-        TRAddress3 = findViewById(R.id.TRAddress3);
-        TREmail2 = findViewById(R.id.TREmail2);
-        TREmail3 = findViewById(R.id.TREmail3);
-        TRSite2 = findViewById(R.id.TRSite2);
-        TRSite3 = findViewById(R.id.TRSite3);
-        BAddPhone = findViewById(R.id.BAddPhone);
-        BDelPhone = findViewById(R.id.BDelPhone);
-        BAddAddress = findViewById(R.id.BAddAddress);
-        BDelAddress = findViewById(R.id.BDelAddress);
-        BAddEmail = findViewById(R.id.BAddEmail);
-        BDelEmail = findViewById(R.id.BDelEmail);
-        BAddSite = findViewById(R.id.BAddSite);
-        BDelSite = findViewById(R.id.BDelSite);
-        floatingActionButton2= findViewById(R.id.floatingActionButton2);
 
         TRPhone2.setEnabled(false);
         TRPhone2.setVisibility(View.GONE);
