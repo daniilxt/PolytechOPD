@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //System.out.println("before");
         //copyFileOrDir("tessData");
         //System.out.println("after");
-        copyFile("eng_traineddata.traineddata");
-        copyFile("rus_traineddata.traineddata");
+        copyFile("eng.traineddata");
+        copyFile("rus.traineddata");
 
         //s1 = dataBase.s1;
         //s2 = dataBase.s2;

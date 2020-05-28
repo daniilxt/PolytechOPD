@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../Parserlib/Parserlib.iml" filepath="$PROJECT_DIR$/../Parserlib/Parserlib.iml" group="Scan/Parserlib" />
       <module fileurl="file://$PROJECT_DIR$/../Scan.iml" filepath="$PROJECT_DIR$/../Scan.iml" group="Scan" />
+      <module fileurl="file://$PROJECT_DIR$/../Parserlib/Scan-Parserlib.iml" filepath="$PROJECT_DIR$/../Parserlib/Scan-Parserlib.iml" group="Scan/Parserlib" />
+      <module fileurl="file://$PROJECT_DIR$/Scan-app.iml" filepath="$PROJECT_DIR$/Scan-app.iml" group="Scan/app" />
+      <module fileurl="file://$PROJECT_DIR$/../ScanAndroid-Scan.iml" filepath="$PROJECT_DIR$/../ScanAndroid-Scan.iml" group="Scan" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="Scan/app" />
     </modules>
   </component>
