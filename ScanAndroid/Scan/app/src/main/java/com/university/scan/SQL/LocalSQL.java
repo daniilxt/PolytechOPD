@@ -60,8 +60,8 @@ public class LocalSQL extends SQLiteOpenHelper {
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
                     "  [name_id] INTEGER, \n" +
                     "  [company_id] INTEGER, \n" +
-                    "  FOREIGN KEY [name_id] references [Name]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
-                    "  FOREIGN KEY [company_id] references [Company]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
+                    "  FOREIGN KEY [name_id] REFERENCES [Name]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
+                    "  FOREIGN KEY [company_id] REFERENCES [Company]([id]) ON DELETE CASCADE ON UPDATE CASCADE, \n" +
                     "  [photo] IMAGE, \n" +
                     "  [qr] IMAGE\n" +
                     ");\n",
