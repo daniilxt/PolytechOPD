@@ -1,4 +1,4 @@
-package com.university.scan.SQL;
+package com.example.myapplication;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,12 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.myapplication.Record;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
-import Parsers.Card;
 
 public class LocalSQL extends SQLiteOpenHelper {
 
@@ -66,26 +66,26 @@ public class LocalSQL extends SQLiteOpenHelper {
                     "  [qr] IMAGE\n" +
                     ");\n",
             "create table [CardAddress](\n" +
-                    "  card_id INTEGER NOT NULL,\n" +
-                    "  address_id INTEGER NOT NULL,\n" +
+                    "  card_id,\n" +
+                    "  address_id,\n" +
                     "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                     "  FOREIGN KEY (address_id) REFERENCES [Adress](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");\n",
             "create table [CardEmail](\n" +
-                    "  card_id INTEGER NOT NULL,\n" +
-                    "  email_id INTEGER NOT NULL,\n" +
+                    "  card_id,\n" +
+                    "  email_id,\n" +
                     "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                     "  FOREIGN KEY (email_id) REFERENCES [Adress](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");\n",
             "create table [CardPhone](\n" +
-                    "  card_id INTEGER NOT NULL,\n" +
-                    "  phone_id INTEGER NOT NULL,\n" +
+                    "  card_id,\n" +
+                    "  phone_id,\n" +
                     "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                     "  FOREIGN KEY (phone_id) REFERENCES [Phone](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");\n",
             "create table [CardWebSite](\n" +
-                    "  card_id INTEGER NOT NULL,\n" +
-                    "  website_id INTEGER NOT NULL,\n" +
+                    "  card_id,\n" +
+                    "  website_id,\n" +
                     "  FOREIGN KEY (card_id) REFERENCES [Card](id) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                     "  FOREIGN KEY (website_id) REFERENCES [WebSite](id) ON DELETE CASCADE ON UPDATE CASCADE\n" +
                     ");"};
@@ -94,12 +94,14 @@ public class LocalSQL extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    private SQLiteDatabase db;
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("PRAGMA foreign_keys=ON;");
         for (String s : TABLE_ARRAY) {
             db.execSQL(s);
         }
+        this.db = db;
     }
 
     @Override
@@ -111,7 +113,7 @@ public class LocalSQL extends SQLiteOpenHelper {
         onCreate(db);
     }
     private void addPhonesAddress(Card card, long cardId) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValuesList = new ContentValues();
         for (String phone : card.getPhoneNumbers()) {
@@ -160,7 +162,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addCard(Card card) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
 
         if (db != null) {
             long id = card.getId();
@@ -218,11 +220,11 @@ public class LocalSQL extends SQLiteOpenHelper {
                 addPhonesAddress(card, cardId);
             }
         }
-        db.close();
+        // //db.close();
     }
 
     public Card getCard(long id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
         Card card = new Card();
 
         if (db != null) {
@@ -275,12 +277,12 @@ public class LocalSQL extends SQLiteOpenHelper {
             card.setCompanyName(cursorCompany.getString(0));
             cursorCompany.close();
         }
-        db.close();
+        //db.close();
         return card;
     }
 
     public List<Record> getRecords() {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
         Card card;
 
         List<Record> records = new ArrayList<>();
@@ -296,12 +298,12 @@ public class LocalSQL extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
         }
-        db.close();
+        //db.close();
         return records;
     }
 
     public void addPhone(long cardId, String phone) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -315,7 +317,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updatePhone(long cardId, String prevPhone, String nextPhone) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         if (db != null) {
 
@@ -328,7 +330,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addEmail(long cardId, String email) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -342,7 +344,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateEmail(long cardId, String prevPhone, String nextPhone) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         if (db != null) {
 
@@ -355,7 +357,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addAddress(long cardId, String address) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -369,7 +371,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateAddress(long cardId, String prevPhone, String nextPhone) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         if (db != null) {
 
@@ -382,7 +384,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addWebsite(long cardId, String address) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -396,7 +398,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateWebsite(long cardId, String prevPhone, String nextPhone) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         if (db != null) {
 
@@ -409,7 +411,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateName(long cardId, String name) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         if (db != null) {
 
@@ -421,7 +423,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateCompany(long cardId, String company) {
-        SQLiteDatabase db = this.getReadableDatabase();
+//        SQLiteDatabase db = this.getReadableDatabase();
 
         if (db != null) {
 
@@ -455,21 +457,21 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void deleteCard(long id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         String rawQuery = "DELETE FROM Card\n" +
                 "        WHERE id = " + id + ";";
         Cursor cursor = db.rawQuery(rawQuery, null);
 
         cursor.close();
-        db.close();
+        //db.close();
     }
 
     public void deleteAll() {
-        SQLiteDatabase db = this.getWritableDatabase();
+//        SQLiteDatabase db = this.getWritableDatabase();
         String rawQuery = "DELETE FROM Card;";
         Cursor cursor = db.rawQuery(rawQuery, null);
 
         cursor.close();
-        db.close();
+        //db.close();
     }
 }
