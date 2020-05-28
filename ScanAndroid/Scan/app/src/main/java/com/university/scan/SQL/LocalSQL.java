@@ -31,28 +31,28 @@ public class LocalSQL extends SQLiteOpenHelper {
             "  [postIndex] INTEGER);\n",
             "create table [Company](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
-                    "  [name] NVARCHAR not null\n" +
+                    "  [name] NVARCHAR,\n" +
                     "  [type] NVARCHAR\n" +
                     ");\n",
             "create table [Name](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
-                    "  [first_name] NVARCHAR not null, \n" +
-                    "  [last_name] NVARCHAR not null, \n" +
+                    "  [first_name] NVARCHAR, \n" +
+                    "  [last_name] NVARCHAR, \n" +
                     "  [patronymic] NVARCHAR\n" +
                     ");\n",
             "create table [Phone](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
-                    "  [phone] NVARCHAR not null, \n" +
+                    "  [phone] NVARCHAR, \n" +
                     "  [name_ru] NVARCHAR, \n" +
                     "  [name_en] NVARCHAR\n" +
                     ");\n",
             "create table [Email](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
-                    "  [email] NVARCHAR not null, \n" +
+                    "  [email] NVARCHAR, \n" +
                     ");\n",
             "create table [WebSite](\n" +
                     "  [id] INTEGER primary key autoincrement not null unique, \n" +
-                    "  [site] NVARCHAR not null, \n" +
+                    "  [site] NVARCHAR, \n" +
                     "  [name_ru] NVARCHAR, \n" +
                     "  [name_en] NVARCHAR\n" +
                     ");\n",
