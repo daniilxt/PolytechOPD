@@ -109,12 +109,13 @@ public class LocalSQL extends SQLiteOpenHelper {
         for (String table : TABLE_NAME_ARRAY) {
             db.execSQL("DROP TABLE IF EXISTS " + table);
         }
-         for (String s : TABLE_ARRAY) {
+        for (String s : TABLE_ARRAY) {
             db.execSQL(s);
         }
     }
+
     private void addPhonesAddress(Card card, long cardId) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
 
         ContentValues contentValuesList = new ContentValues();
         for (String phone : card.getPhoneNumbers()) {
@@ -164,7 +165,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public long addCard(Card card) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
 
         if (dbaseW != null) {
 
@@ -193,7 +194,7 @@ public class LocalSQL extends SQLiteOpenHelper {
 
                 ContentValues cv = new ContentValues();
                 cv.put("first_name", card.getFirstName());
-                cv.put("last_name", card.getFirstName());
+                cv.put("last_name", card.getLastName());
                 cv.put("patronymic", card.getFatherName());
 
                 dbaseW.update("Name", cv, "id = ?", new String[]{nnameId.toString()});
@@ -206,9 +207,12 @@ public class LocalSQL extends SQLiteOpenHelper {
 
                 ContentValues contentValuesList = new ContentValues();
                 contentValuesList.put("first_name", card.getFirstName());
-                contentValuesList.put("last_name", card.getFirstName());
+                contentValuesList.put("last_name", card.getLastName());
                 contentValuesList.put("patronymic", card.getFatherName());
                 nameId = dbaseW.insert("Name", null, contentValuesList);
+
+                System.out.println("Insert first name = " + card.getFirstName());
+                System.out.println("nameId =" + nameId);
 
                 contentValuesList.clear();
                 contentValuesList.put("name", card.getCompanyName());
@@ -231,19 +235,21 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public Card getCard(long id) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
         Card card = new Card();
 
         if (dbaseR != null) {
             card.setId(id);
+            System.out.println("\ninnner in getCard");
 
             String rawQuery = "SELECT site FROM WebSite INNER JOIN CardWebSite " +
                     "ON WebSite.id = CardWebSite.website_id WHERE CardWebSite.card_id = " + id + ";";
             Cursor cursor = dbaseR.rawQuery(rawQuery, null);
 
+           // cursor.moveToFirst();
             if (cursor.moveToFirst()) {
                 do {
-                    card.setWebsite(cursor.getString(0));
+                    card.setWebsite(cursor.getString(cursor.getColumnIndex("site")));
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -254,7 +260,8 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             if (cursorPhone.moveToFirst()) {
                 do {
-                    card.setPhoneNumber(cursorPhone.getString(0));
+                    card.setPhoneNumber(cursorPhone.getString(cursorPhone.
+                            getColumnIndex("phone")));
                 } while (cursorPhone.moveToNext());
             }
 
@@ -266,7 +273,8 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             if (cursorAddress.moveToFirst()) {
                 do {
-                    card.setOfficeAddress(cursorAddress.getString(0));
+                    card.setOfficeAddress(cursorAddress.getString(cursorAddress.
+                            getColumnIndex("address")));
                 } while (cursorAddress.moveToNext());
             }
             cursorAddress.close();
@@ -275,20 +283,42 @@ public class LocalSQL extends SQLiteOpenHelper {
                     " ON Card.name_id = Name.id WHERE Card.id = " + id + ";";
             Cursor cursorName = dbaseR.rawQuery(rawQueryName, null);
 
-            if (cursor.moveToFirst()) {
-                card.setFirstName(cursorName.getString(0));
-                card.setLastName(cursorName.getString(1));
-                card.setFatherName(cursorName.getString(2));
-            }
+            cursorName.moveToFirst();
+
+            card.setFirstName(cursorName.getString(cursorName.getColumnIndex("first_name")));
+            card.setLastName(cursorName.getString(cursorName.getColumnIndex("last_name")));
+            card.setFatherName(cursorName.getString(cursorName.getColumnIndex("patronymic")));
+
+//            switch (cursor.getCount()) {
+//                case 1:
+//                    card.setFirstName(cursorName.getString(cursor.getCount()));
+//                    break;
+//                case 2:
+//                    card.setFirstName(cursorName.getString(0));
+//                    card.setLastName(cursorName.getString(1));
+//                    break;
+//                case 3:
+//                    card.setFirstName(cursorName.getString(0));
+//                    card.setLastName(cursorName.getString(1));
+//                    card.setFatherName(cursorName.getString(2));
+//                    break;
+//            }
 
             cursorName.close();
 
             String rawQueryCompany = "SELECT name FROM Company INNER JOIN Card" +
                     " ON Card.company_id = Company.id WHERE Card.id = " + id + ";";
             Cursor cursorCompany = dbaseR.rawQuery(rawQueryCompany, null);
-            if (cursor.moveToFirst()) {
-                card.setCompanyName(cursorCompany.getString(0));
-            }
+
+            cursorCompany.moveToFirst();
+            card.setCompanyName(cursorCompany.getString(cursorCompany.
+                    getColumnIndex("name")));
+//
+//            if (cursor.getColumnCount() == 1) {
+//                card.setCompanyName(cursorCompany.getString(cursorCompany.
+//                        getColumnIndex("name")));
+//            }
+
             cursorCompany.close();
         }
         dbaseR.close();
@@ -296,7 +326,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public List<Record> getRecords() {
-       SQLiteDatabase dbaseR = getReadableDatabase();
+        SQLiteDatabase dbaseR = getReadableDatabase();
         Card card;
 
         List<Record> records = new ArrayList<>();
@@ -320,7 +350,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addPhone(long cardId, String phone) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -335,7 +365,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updatePhone(long cardId, String prevPhone, String nextPhone) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
 
         if (dbaseR != null) {
 
@@ -349,7 +379,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addEmail(long cardId, String email) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -364,7 +394,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateEmail(long cardId, String prevPhone, String nextPhone) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
 
         if (dbaseR != null) {
 
@@ -378,7 +408,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addAddress(long cardId, String address) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -393,7 +423,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateAddress(long cardId, String prevPhone, String nextPhone) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
 
         if (dbaseR != null) {
 
@@ -408,7 +438,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void addWebsite(long cardId, String address) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
         ContentValues contentValuesList = new ContentValues();
 
         contentValuesList.clear();
@@ -424,7 +454,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateWebsite(long cardId, String prevPhone, String nextPhone) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
 
         if (dbaseR != null) {
 
@@ -438,7 +468,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateName(long cardId, String name) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
 
         if (dbaseR != null) {
 
@@ -451,7 +481,7 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     private void updateCompany(long cardId, String company) {
-       SQLiteDatabase dbaseR = this.getReadableDatabase();
+        SQLiteDatabase dbaseR = this.getReadableDatabase();
 
         if (dbaseR != null) {
 
@@ -486,17 +516,15 @@ public class LocalSQL extends SQLiteOpenHelper {
     }
 
     public void deleteCard(long id) {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
-        String rawQuery = "DELETE FROM Card\n" +
-                "        WHERE id = " + id + ";";
-        Cursor cursor = dbaseW.rawQuery(rawQuery, null);
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
 
-        cursor.close();
+        int delCount = dbaseW.delete("Card", "id = " + id, null);
+        System.out.println("delete from db = " + delCount);
         dbaseW.close();
     }
 
     public void deleteAll() {
-       SQLiteDatabase dbaseW = this.getWritableDatabase();
+        SQLiteDatabase dbaseW = this.getWritableDatabase();
         String rawQuery = "DELETE FROM Card;";
         Cursor cursor = dbaseW.rawQuery(rawQuery, null);
 
