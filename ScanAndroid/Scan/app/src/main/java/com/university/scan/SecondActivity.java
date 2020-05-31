@@ -1,10 +1,15 @@
 package com.university.scan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +28,6 @@ import java.util.List;
 import Parsers.Card;
 
 public class SecondActivity extends AppCompatActivity {
-
-    LocalSQL sql;
 
     ImageView mainImageView;
     TableRow TRPhone2;
@@ -114,145 +117,31 @@ public class SecondActivity extends AppCompatActivity {
         openedEmails = 0;
         openedSites = 0;
 
-
-        sql = new LocalSQL(SecondActivity.this);
-
-        long id  = getIntent().getLongExtra("id", 0);
+        //long id  = getIntent().getLongExtra("id", 0);
         //long id  = StaticVar.var;
 
 //        Toast toast = Toast.makeText(getApplicationContext(),
 //                idString, Toast.LENGTH_SHORT);
 //        toast.show();
 
-        Card card = sql.getCard(id);
-
-        mainImageView.setImageURI(Uri.parse(card.getImage()));
-
-        ETFirstName.setText(card.getFirstName().trim());
-        ETLastName.setText(card.getLastName().trim());
-        ETFatherName.setText(card.getFatherName().trim());
-        ETCompany.setText(card.getCompanyName().trim());
-
-        if (card.getPhoneNumbers().size() != 0) {
-            openedPhones = card.getPhoneNumbers().size() - 1;
-            checkPhones();
-
-            Iterator<String> iterator = card.getPhoneNumbers().iterator();
-
-            List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
-                iterators.add(iterator.next());
-            }
-
-            switch (openedPhones) {
-                case 0: {
-                    ETPhone1.setText(iterators.get(0));
-                    break;
-                }
-                case 1: {
-                    ETPhone1.setText(iterators.get(0));
-                    ETPhone2.setText(iterators.get(1));
-                    break;
-                }
-                case 2: {
-                    ETPhone1.setText(iterators.get(0));
-                    ETPhone2.setText(iterators.get(1));
-                    ETPhone3.setText(iterators.get(2));
-                    break;
-                }
-            }
-        }
-
-        if (card.getWebsite().size() != 0) {
-            openedSites = card.getWebsite().size() - 1;
-            checkSites();
-
-            Iterator<String> iterator = card.getWebsite().iterator();
-
-            List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
-                iterators.add(iterator.next());
-            }
-
-            switch (openedSites) {
-                case 0: {
-                    ETSite1.setText(iterators.get(0));
-                    break;
-                }
-                case 1: {
-                    ETSite1.setText(iterators.get(0));
-                    ETSite2.setText(iterators.get(1));
-                    break;
-                }
-                case 2: {
-                    ETSite1.setText(iterators.get(0));
-                    ETSite2.setText(iterators.get(1));
-                    ETSite3.setText(iterators.get(2));
-                    break;
-                }
-            }
-        }
-
-        if (card.getOfficeAddress().size() != 0) {
-            openedAddresses = card.getOfficeAddress().size() - 1;
-            checkAddress();
-
-            Iterator<String> iterator = card.getEmails().iterator();
-
-            List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
-                iterators.add(iterator.next());
-            }
-
-            switch (openedAddresses) {
-                case 0: {
-                    ETAddress1.setText(iterators.get(0));
-                    break;
-                }
-                case 1: {
-                    ETAddress1.setText(iterators.get(0));
-                    ETAddress2.setText(iterators.get(1));
-                    break;
-                }
-                case 2: {
-                    ETAddress1.setText(iterators.get(0));
-                    ETAddress2.setText(iterators.get(1));
-                    ETAddress3.setText(iterators.get(2));
-                    break;
-                }
-            }
-        }
-
-        if (card.getEmails().size() != 0) {
-            openedEmails = card.getEmails().size() - 1;
-            checkEmails();
-
-            Iterator<String> iterator = card.getEmails().iterator();
-
-            List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
-                iterators.add(iterator.next());
-            }
-
-            switch (openedEmails) {
-                case 0: {
-                    ETEmail1.setText(iterators.get(0));
-                    break;
-                }
-                case 1: {
-                    ETEmail1.setText(iterators.get(0));
-                    ETEmail2.setText(iterators.get(1));
-                    break;
-                }
-                case 2: {
-                    ETEmail1.setText(iterators.get(0));
-                    ETEmail2.setText(iterators.get(1));
-                    ETEmail3.setText(iterators.get(2));
-                    break;
-                }
-            }
-        }
-
+//        ETSite1.setClickable(false);
+//        ETAddress1.setClickable(false);
+//        ETEmail1.setClickable(false);
+//        ETPhone1.setClickable(false);
+//        ETCompany.setClickable(false);
+//        ETFatherName.setClickable(false);
+//        ETLastName.setClickable(false);
+//        ETFirstName.setClickable(false);
+//
+//        BAddPhone.setClickable(false);
+//        BDelPhone.setClickable(false);
+//        BAddAddress.setClickable(false);
+//        BDelAddress.setClickable(false);
+//        BAddEmail.setClickable(false);
+//        BDelEmail.setClickable(false);
+//        BAddSite.setClickable(false);
+//        BDelSite.setClickable(false);
+//        floatingActionButton2.setClickable(false);
 
         TRPhone2.setEnabled(false);
         TRPhone2.setVisibility(View.GONE);
@@ -275,6 +164,8 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Card card = new Card();
+
+                card.setId(StaticVar.var);
 
                 if (isEmpty(ETFirstName) || isEmpty(ETLastName) || isEmpty(ETFatherName) || isEmpty(ETCompany)) {
                     Toast toast = Toast.makeText(getApplicationContext(),
@@ -327,6 +218,12 @@ public class SecondActivity extends AppCompatActivity {
                 if (!isEmpty(ETSite3)) {
                     card.setOfficeAddress(ETSite3.getText().toString());
                 }
+
+                LocalSQL sql = new LocalSQL(SecondActivity.this);
+                sql.addCard(card);
+
+                Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -585,9 +482,175 @@ public class SecondActivity extends AppCompatActivity {
                 }
             }
         });
-
+        
+      //  showCard();
         //getData();
        // setData();
+    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(resultCode==RESULT_OK){
+//            if(requestCode==100){
+//                System.out.println("showCard");
+//                showCard();
+//            }
+//        }
+//        finish();
+//    }
+
+    private void showCard() {
+//        ETSite1.setClickable(true);
+//        ETAddress1.setClickable(true);
+//        ETEmail1.setClickable(true);
+//        ETPhone1.setClickable(true);
+//        ETCompany.setClickable(true);
+//        ETFatherName.setClickable(true);
+//        ETLastName.setClickable(true);
+//        ETFirstName.setClickable(true);
+//
+//        BAddPhone.setClickable(true);
+//        BDelPhone.setClickable(true);
+//        BAddAddress.setClickable(true);
+//        BDelAddress.setClickable(true);
+//        BAddEmail.setClickable(true);
+//        BDelEmail.setClickable(true);
+//        BAddSite.setClickable(true);
+//        BDelSite.setClickable(true);
+//        floatingActionButton2.setClickable(true);
+
+        LocalSQL sql = new LocalSQL(SecondActivity.this);
+        Card card = sql.getCard(StaticVar.var);
+
+        System.out.println("StaticVar.var = " + StaticVar.var);
+
+        mainImageView.setImageURI(Uri.parse(card.getImage()));
+
+        ETFirstName.setText(card.getFirstName().trim());
+        ETLastName.setText(card.getLastName().trim());
+        ETFatherName.setText(card.getFatherName().trim());
+        ETCompany.setText(card.getCompanyName().trim());
+
+        if (card.getPhoneNumbers().size() != 0) {
+            openedPhones = card.getPhoneNumbers().size() - 1;
+            checkPhones();
+
+            Iterator<String> iterator = card.getPhoneNumbers().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedPhones) {
+                case 0: {
+                    ETPhone1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETPhone1.setText(iterators.get(0));
+                    ETPhone2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETPhone1.setText(iterators.get(0));
+                    ETPhone2.setText(iterators.get(1));
+                    ETPhone3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
+
+        if (card.getWebsite().size() != 0) {
+            openedSites = card.getWebsite().size() - 1;
+            checkSites();
+
+            Iterator<String> iterator = card.getWebsite().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedSites) {
+                case 0: {
+                    ETSite1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETSite1.setText(iterators.get(0));
+                    ETSite2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETSite1.setText(iterators.get(0));
+                    ETSite2.setText(iterators.get(1));
+                    ETSite3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
+
+        if (card.getOfficeAddress().size() != 0) {
+            openedAddresses = card.getOfficeAddress().size() - 1;
+            checkAddress();
+
+            Iterator<String> iterator = card.getEmails().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedAddresses) {
+                case 0: {
+                    ETAddress1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETAddress1.setText(iterators.get(0));
+                    ETAddress2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETAddress1.setText(iterators.get(0));
+                    ETAddress2.setText(iterators.get(1));
+                    ETAddress3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
+
+        if (card.getEmails().size() != 0) {
+            openedEmails = card.getEmails().size() - 1;
+            checkEmails();
+
+            Iterator<String> iterator = card.getEmails().iterator();
+
+            List<String> iterators = new ArrayList<>();
+            while (iterator.hasNext()) {
+                iterators.add(iterator.next());
+            }
+
+            switch (openedEmails) {
+                case 0: {
+                    ETEmail1.setText(iterators.get(0));
+                    break;
+                }
+                case 1: {
+                    ETEmail1.setText(iterators.get(0));
+                    ETEmail2.setText(iterators.get(1));
+                    break;
+                }
+                case 2: {
+                    ETEmail1.setText(iterators.get(0));
+                    ETEmail2.setText(iterators.get(1));
+                    ETEmail3.setText(iterators.get(2));
+                    break;
+                }
+            }
+        }
     }
 
     private void checkSites() {

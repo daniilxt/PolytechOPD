@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.university.scan.SQL.LocalSQL;
+import com.university.scan.SQL.Record;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,9 +53,9 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    RecyclerView recyclerView;
-    FloatingActionButton floatingActionButton;
-    MyAdapter myAdapter;
+    private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
+    private MyAdapter myAdapter;
     private Uri outputFileUri;
     private Context context;
     private File saveDir;
@@ -142,6 +144,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        myAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Record record) {
+                StaticVar.var = record.getId();
+
+
+                Intent cam = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(cam);
+            }
+        });
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
@@ -220,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.floatingActionButton2:
                 dispatchTakePictureIntent();
+                Card card = new Card();
 
                 //Intent intent = new Intent(this, ThirdActivity.class);
                 //startActivity(intent);
@@ -255,9 +269,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //
                 StaticVar.var = -1;
 
-                //Intent intent = new Intent(this, SecondActivity.class);
-                //intent.putExtra("outputFileUri", outputFileUri);
-                //startActivity(intent);
+                Intent intent = new Intent(this, SecondActivity.class);
+                intent.putExtra("outputFileUri", outputFileUri);
+                startActivity(intent);
 
             }
         }
@@ -496,14 +510,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Card card = cardsArray.get(cardsArray.size() -1);
         card.setImage(currentPhotoPath);
 
-        card.setFirstName("adasd");
+        card.setFirstName("add Card in db");
         LocalSQL sql = new LocalSQL(MainActivity.this);
         long id = sql.addCard(card);
 
         StaticVar.var = id;
 
-        Intent intent = new Intent(this, SecondActivity.class);
-        intent.putExtra("id", id);
-        startActivity(intent);
     }
 }

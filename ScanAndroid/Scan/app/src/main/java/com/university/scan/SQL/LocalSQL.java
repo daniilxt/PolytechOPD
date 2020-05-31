@@ -143,7 +143,7 @@ public class LocalSQL extends SQLiteOpenHelper {
         for (String site : card.getWebsite()) {
             contentValuesList.clear();
             contentValuesList.put("site", site);
-            long webSiteId = dbaseW.insert("Phone", null, contentValuesList);
+            long webSiteId = dbaseW.insert("WebSite", null, contentValuesList);
 
             contentValuesList.clear();
             contentValuesList.put("card_id", cardId);
@@ -158,10 +158,10 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             contentValuesList.clear();
             contentValuesList.put("card_id", cardId);
-            contentValuesList.put("website_id", addressId);
+            contentValuesList.put("address_id", addressId);
             dbaseW.insert("CardAddress", null, contentValuesList);
         }
-        dbaseW.close();
+        //  dbaseW.close();
     }
 
     public long addCard(Card card) {
@@ -174,23 +174,23 @@ public class LocalSQL extends SQLiteOpenHelper {
             long cardId = id;
             long nameId;
             long companyId;
-            if (id != -1) {
-                dbaseW.delete("CardWebSite", "card_id = " + id, null);
-                dbaseW.delete("CardAddress", "card_id = " + id, null);
-                dbaseW.delete("CardPhone", "card_id = " + id, null);
-                dbaseW.delete("CardEmail", "card_id = " + id, null);
 
-                addPhonesAddress(card, id);
+            dbaseW.delete("CardWebSite", "card_id = " + id, null);
+            dbaseW.delete("CardAddress", "card_id = " + id, null);
+            dbaseW.delete("CardPhone", "card_id = " + id, null);
+            dbaseW.delete("CardEmail", "card_id = " + id, null);
 
-                Long nnameId;
-                Long ccompanyId;
+            Long nnameId;
+            Long ccompanyId;
 
-                String rawQuery = "SELECT name_id, compane_id FROM Card " +
-                        " WHERE Card.id = " + id + ";";
-                Cursor cursor = dbaseW.rawQuery(rawQuery, null);
+            String rawQuery = "SELECT name_id, company_id FROM Card " +
+                    " WHERE Card.id = " + id + ";";
+            Cursor cursor = dbaseW.rawQuery(rawQuery, null);
 
-                nnameId = cursor.getLong(0);
-                ccompanyId = cursor.getLong(1);
+            if (cursor.moveToFirst()) {
+
+                nnameId = cursor.getLong(cursor.getColumnIndex("name_id"));
+                ccompanyId = cursor.getLong(cursor.getColumnIndex("company_id"));
 
                 ContentValues cv = new ContentValues();
                 cv.put("first_name", card.getFirstName());
@@ -224,9 +224,9 @@ public class LocalSQL extends SQLiteOpenHelper {
                 contentValuesList.put("company_id", companyId);
                 contentValuesList.put("photo", card.getImage());
                 cardId = dbaseW.insert("Card", null, contentValuesList);
-
-                addPhonesAddress(card, cardId);
             }
+
+            addPhonesAddress(card, cardId);
             dbaseW.close();
             return cardId;
         }
@@ -246,7 +246,7 @@ public class LocalSQL extends SQLiteOpenHelper {
                     "ON WebSite.id = CardWebSite.website_id WHERE CardWebSite.card_id = " + id + ";";
             Cursor cursor = dbaseR.rawQuery(rawQuery, null);
 
-           // cursor.moveToFirst();
+            // cursor.moveToFirst();
             if (cursor.moveToFirst()) {
                 do {
                     card.setWebsite(cursor.getString(cursor.getColumnIndex("site")));
