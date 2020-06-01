@@ -23,7 +23,9 @@ public class Record {
         return image;
     }
 
-    public Record(long id, String companyName, String firstName, String lastName, String fatherName, String phoneNumber, String emails, String website, String officeAddress, String image) {
+    public Record(long id, String companyName, String firstName, String lastName,
+                  String fatherName, String phoneNumber, String emails, String website,
+                  String officeAddress, String image) {
         this.id = id;
         this.companyName = companyName;
         this.firstName = firstName;

@@ -68,6 +68,8 @@ public class SecondActivity extends AppCompatActivity {
     EditText ETSite2;
     EditText ETSite3;
 
+    private String outputFileUri;
+
     String data1, data2;
     int myImage;
 
@@ -117,8 +119,12 @@ public class SecondActivity extends AppCompatActivity {
         openedEmails = 0;
         openedSites = 0;
 
-        //long id  = getIntent().getLongExtra("id", 0);
-        //long id  = StaticVar.var;
+        outputFileUri  = getIntent().getStringExtra("outputFileUri");
+
+        System.out.println("picture taken!");
+        System.out.println(outputFileUri);
+
+        mainImageView.setImageURI(Uri.parse(outputFileUri));
 
 //        Toast toast = Toast.makeText(getApplicationContext(),
 //                idString, Toast.LENGTH_SHORT);
@@ -164,6 +170,8 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Card card = new Card();
+
+                card.setImage(outputFileUri);
 
                 card.setId(StaticVar.var);
 
@@ -482,23 +490,11 @@ public class SecondActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
       //  showCard();
         //getData();
        // setData();
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(resultCode==RESULT_OK){
-//            if(requestCode==100){
-//                System.out.println("showCard");
-//                showCard();
-//            }
-//        }
-//        finish();
-//    }
 
     private void showCard() {
 //        ETSite1.setClickable(true);
@@ -524,8 +520,6 @@ public class SecondActivity extends AppCompatActivity {
         Card card = sql.getCard(StaticVar.var);
 
         System.out.println("StaticVar.var = " + StaticVar.var);
-
-        mainImageView.setImageURI(Uri.parse(card.getImage()));
 
         ETFirstName.setText(card.getFirstName().trim());
         ETLastName.setText(card.getLastName().trim());

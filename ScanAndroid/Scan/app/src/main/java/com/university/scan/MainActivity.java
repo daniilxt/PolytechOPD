@@ -150,9 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(Record record) {
                 StaticVar.var = record.getId();
 
-
-                Intent cam = new Intent(MainActivity.this, SecondActivity.class);
-                startActivity(cam);
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("outputFileUri", record.getImage());
+                startActivity(intent);
             }
         });
     }
@@ -170,15 +170,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             final int position = viewHolder.getAdapterPosition();
             //delData.setParam(s1.get(position), s2.get(position), images.get(position));
-            delData = dataBase.getItem(position);
+          //  delData = dataBase.getItem(position);
 
             //dataBase.delete(position);
             //s1 = dataBase.s1;
             //s2 = dataBase.s2;
             //images = dataBase.images;
-            myAdapter.remove(position);
+            Record record = myAdapter.remove(position);
             myAdapter.notifyItemRemoved(position);
-            Snackbar.make(recyclerView, delData.getString1(), Snackbar.LENGTH_LONG)
+            Snackbar.make(recyclerView, record.getCompanyName(), Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.floatingActionButton2:
                 dispatchTakePictureIntent();
-                Card card = new Card();
 
                 //Intent intent = new Intent(this, ThirdActivity.class);
                 //startActivity(intent);
@@ -270,9 +269,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 StaticVar.var = -1;
 
                 Intent intent = new Intent(this, SecondActivity.class);
-                intent.putExtra("outputFileUri", outputFileUri);
+                intent.putExtra("outputFileUri", outputFileUri.getPath());
                 startActivity(intent);
-
             }
         }
     }

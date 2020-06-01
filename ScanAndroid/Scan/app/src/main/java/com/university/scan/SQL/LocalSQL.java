@@ -502,7 +502,8 @@ public class LocalSQL extends SQLiteOpenHelper {
                 getFirstElemFromHashSet(card.getPhoneNumbers()),
                 getFirstElemFromHashSet(card.getEmails()),
                 getFirstElemFromHashSet(card.getWebsite()),
-                getFirstElemFromHashSet(card.getOfficeAddress()));
+                getFirstElemFromHashSet(card.getOfficeAddress()),
+                card.getImage());
     }
 
     private static String getFirstElemFromHashSet(HashSet<String> hashSet) {

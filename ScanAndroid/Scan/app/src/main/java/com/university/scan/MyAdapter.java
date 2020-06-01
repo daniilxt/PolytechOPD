@@ -88,11 +88,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         return records.size();
     }
 
-    public void remove(int position) {
+    public Record remove(int position) {
         Record record = records.remove(position);
         LocalSQL sql = new LocalSQL(context);
         sql.deleteCard(record.getId());
         notifyItemRemoved(position);
+        return record;
     }
 
 //    public void remove(int position){
@@ -198,8 +199,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             myText1.setText(record.getFirstName());
             myText2.setText(record.getLastName());
             company.setText(record.getCompanyName());
-            record.getImage();
-            //myImage.setImageURI(Uri.parse(record.getImage()));
+            String image = record.getImage();
+            if (image != null && !image.isEmpty()) {
+                myImage.setImageURI(Uri.parse(record.getImage()));
+            }
         }
     }
 }
