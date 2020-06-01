@@ -12,15 +12,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.university.scan.SQL.LocalSQL;
+
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -70,6 +75,7 @@ public class SecondActivity extends AppCompatActivity {
     EditText ETSite1;
     EditText ETSite2;
     EditText ETSite3;
+    ScrollView SVScrollView;
 
     private String outputFileUri;
 
@@ -97,6 +103,7 @@ public class SecondActivity extends AppCompatActivity {
         ETSite1 = findViewById(R.id.ETSite1);
         ETSite2 = findViewById(R.id.ETSite2);
         ETSite3 = findViewById(R.id.ETSite3);
+        SVScrollView = findViewById(R.id.SVScrollView);
 
         mainImageView = findViewById(R.id.mainImageView);
         TRPhone2 = findViewById(R.id.TRPhone2);
@@ -184,6 +191,23 @@ public class SecondActivity extends AppCompatActivity {
         TRSite2.setVisibility(View.GONE);
         TRSite3.setEnabled(false);
         TRSite3.setVisibility(View.GONE);
+
+        KeyboardVisibilityEvent.setEventListener(
+                this,
+                new KeyboardVisibilityEventListener() {
+                    @Override
+                    public void onVisibilityChanged(boolean isOpen) {
+                        ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) SVScrollView.getLayoutParams();
+                        System.out.println(params.height);
+                        if (isOpen) {
+                            params.height = (int) (150 * 2.75);
+                            SVScrollView.setLayoutParams(params);
+                        } else {
+                            params.height = (int) (380 * 2.75);
+                            SVScrollView.setLayoutParams(params);
+                        }
+                    }
+                });
 
         floatingActionButton2.setOnClickListener(new View.OnClickListener() {
             @Override
