@@ -15,9 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.university.scan.SQL.LocalSQL;
 import com.university.scan.SQL.Record;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -201,7 +203,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             company.setText(record.getCompanyName());
             String image = record.getImage();
             if (image != null && !image.isEmpty()) {
-                myImage.setImageURI(Uri.parse(record.getImage()));
+                Picasso.get().load(new File(record.getImage())).into(myImage);
             }
         }
     }

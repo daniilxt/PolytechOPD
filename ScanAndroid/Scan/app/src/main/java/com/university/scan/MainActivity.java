@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -512,6 +513,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println("add Card\n");
         Card card = cardsArray.get(cardsArray.size() -1);
         card.setImage(currentPhotoPath);
+
+       List<String> contactName = Arrays.asList(card.getContactName().split(" "));
+        while (contactName.size() < 3) {
+            contactName.add("");
+        }
+
+        card.setFirstName(contactName.get(0));
+        card.setLastName(contactName.get(1));
+        card.setFatherName(contactName.get(2));
 
         LocalSQL sql = new LocalSQL(MainActivity.this);
         long id = sql.addCard(card);

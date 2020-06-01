@@ -126,6 +126,27 @@ public class SecondActivity extends AppCompatActivity {
         BDelSite = findViewById(R.id.BDelSite);
         floatingActionButton2 = findViewById(R.id.floatingActionButton2);
 
+     //   if (StaticVar.var == -1) {
+            BAddPhone.setEnabled(false);
+            BDelPhone.setEnabled(false);
+            BAddAddress.setEnabled(false);
+            BDelAddress.setEnabled(false);
+            BAddEmail.setEnabled(false);
+            BDelEmail.setEnabled(false);
+            BAddSite.setEnabled(false);
+            BDelSite.setEnabled(false);
+            floatingActionButton2.setEnabled(false);
+
+            disableEditText(ETLastName);
+            disableEditText(ETFirstName);
+            disableEditText(ETFatherName);
+            disableEditText(ETCompany);
+            disableEditText(ETPhone1);
+            disableEditText(ETEmail1);
+            disableEditText(ETAddress1);
+            disableEditText(ETSite1);
+
+
         openedPhones = 0;
         openedAddresses = 0;
         openedEmails = 0;
@@ -148,7 +169,9 @@ public class SecondActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         System.out.println("Show Card");
-                        showCard();
+                        synchronized(this) {
+                            showCard();
+                        }
                     }
                 });
             }
@@ -159,25 +182,6 @@ public class SecondActivity extends AppCompatActivity {
 //        Toast toast = Toast.makeText(getApplicationContext(),
 //                idString, Toast.LENGTH_SHORT);
 //        toast.show();
-
-//        ETSite1.setClickable(false);
-//        ETAddress1.setClickable(false);
-//        ETEmail1.setClickable(false);
-//        ETPhone1.setClickable(false);
-//        ETCompany.setClickable(false);
-//        ETFatherName.setClickable(false);
-//        ETLastName.setClickable(false);
-//        ETFirstName.setClickable(false);
-//
-//        BAddPhone.setClickable(false);
-//        BDelPhone.setClickable(false);
-//        BAddAddress.setClickable(false);
-//        BDelAddress.setClickable(false);
-//        BAddEmail.setClickable(false);
-//        BDelEmail.setClickable(false);
-//        BAddSite.setClickable(false);
-//        BDelSite.setClickable(false);
-//        floatingActionButton2.setClickable(false);
 
         TRPhone2.setEnabled(false);
         TRPhone2.setVisibility(View.GONE);
@@ -543,25 +547,38 @@ public class SecondActivity extends AppCompatActivity {
         // setData();
     }
 
+    private void disableEditText(EditText editText) {
+        editText.setLongClickable(false);
+        editText.setFocusable(false);
+        editText.setCursorVisible(false);
+    }
+
+    private void enableEditText(EditText editText) {
+        editText.setLongClickable(true);
+        editText.setFocusable(true);
+        editText.setCursorVisible(true);
+        editText.setFocusableInTouchMode(true);
+    }
+
     public void showCard() {
-//        ETSite1.setClickable(true);
-//        ETAddress1.setClickable(true);
-//        ETEmail1.setClickable(true);
-//        ETPhone1.setClickable(true);
-//        ETCompany.setClickable(true);
-//        ETFatherName.setClickable(true);
-//        ETLastName.setClickable(true);
-//        ETFirstName.setClickable(true);
-//
-//        BAddPhone.setClickable(true);
-//        BDelPhone.setClickable(true);
-//        BAddAddress.setClickable(true);
-//        BDelAddress.setClickable(true);
-//        BAddEmail.setClickable(true);
-//        BDelEmail.setClickable(true);
-//        BAddSite.setClickable(true);
-//        BDelSite.setClickable(true);
-//        floatingActionButton2.setClickable(true);
+        enableEditText(ETLastName);
+        enableEditText(ETFirstName);
+        enableEditText(ETFatherName);
+        enableEditText(ETCompany);
+        enableEditText(ETPhone1);
+        enableEditText(ETEmail1);
+        enableEditText(ETAddress1);
+        enableEditText(ETSite1);
+
+        BAddPhone.setEnabled(true);
+        BDelPhone.setEnabled(true);
+        BAddAddress.setEnabled(true);
+        BDelAddress.setEnabled(true);
+        BAddEmail.setEnabled(true);
+        BDelEmail.setEnabled(true);
+        BAddSite.setEnabled(true);
+        BDelSite.setEnabled(true);
+        floatingActionButton2.setEnabled(true);
 
         LocalSQL sql = new LocalSQL(this);
         Card card = sql.getCard(StaticVar.var);
@@ -577,12 +594,15 @@ public class SecondActivity extends AppCompatActivity {
 
         if (card.getPhoneNumbers().size() != 0) {
             openedPhones = card.getPhoneNumbers().size() - 1;
+            if (openedPhones > 2) {
+                openedPhones = 2;
+            }
             checkPhones();
 
             Iterator<String> iterator = card.getPhoneNumbers().iterator();
 
             List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && iterators.size() < 3) {
                 iterators.add(iterator.next());
             }
 
@@ -607,12 +627,15 @@ public class SecondActivity extends AppCompatActivity {
 
         if (card.getWebsite().size() != 0) {
             openedSites = card.getWebsite().size() - 1;
+            if (openedSites > 2) {
+                openedSites = 2;
+            }
             checkSites();
 
             Iterator<String> iterator = card.getWebsite().iterator();
 
             List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && iterators.size() < 3) {
                 iterators.add(iterator.next());
             }
 
@@ -637,12 +660,15 @@ public class SecondActivity extends AppCompatActivity {
 
         if (card.getOfficeAddress().size() != 0) {
             openedAddresses = card.getOfficeAddress().size() - 1;
+            if (openedAddresses > 2) {
+                openedAddresses = 2;
+            }
             checkAddress();
 
             Iterator<String> iterator = card.getOfficeAddress().iterator();
 
             List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && iterators.size() < 3) {
                 iterators.add(iterator.next());
             }
 
@@ -667,12 +693,15 @@ public class SecondActivity extends AppCompatActivity {
 
         if (card.getEmails().size() != 0) {
             openedEmails = card.getEmails().size() - 1;
+            if (openedEmails > 2) {
+                openedEmails = 2;
+            }
             checkEmails();
 
             Iterator<String> iterator = card.getEmails().iterator();
 
             List<String> iterators = new ArrayList<>();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && iterators.size() < 3) {
                 iterators.add(iterator.next());
             }
 
