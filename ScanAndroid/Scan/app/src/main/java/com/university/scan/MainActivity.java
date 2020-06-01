@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 StaticVar.var = record.getId();
 
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                intent.putExtra("outputFileUri", record.getImage());
+                intent.putExtra("fileDir", record.getImage());
                 startActivity(intent);
             }
         });

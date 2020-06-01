@@ -641,7 +641,7 @@ public class SecondActivity extends AppCompatActivity {
             openedAddresses = card.getOfficeAddress().size() - 1;
             checkAddress();
 
-            Iterator<String> iterator = card.getEmails().iterator();
+            Iterator<String> iterator = card.getOfficeAddress().iterator();
 
             List<String> iterators = new ArrayList<>();
             while (iterator.hasNext()) {
