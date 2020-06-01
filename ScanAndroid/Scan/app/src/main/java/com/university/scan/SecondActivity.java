@@ -158,7 +158,7 @@ public class SecondActivity extends AppCompatActivity {
         System.out.println(dir);
         if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
             //Picasso.get().load(dir).into(mainImageView);
-            // Picasso.get().load(new File(dir)).into(mainImageView);
+            Picasso.get().load(new File(dir)).into(mainImageView);
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
         }
 

@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //s2 = dataBase.s2;
             //images = dataBase.images;
             Record record = myAdapter.remove(position);
-            myAdapter.notifyItemRemoved(position);
             Snackbar.make(recyclerView, record.getCompanyName(), Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
