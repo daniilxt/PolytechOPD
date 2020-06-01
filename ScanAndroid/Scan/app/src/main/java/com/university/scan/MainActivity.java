@@ -64,19 +64,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static int TAKE_PICTURE_REQUEST = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String MyPREFERENCES = "MyPrefs";
 
 
     DataBase dataBase = new DataBase();
 
-//    List<String> s1 = new ArrayList<String>();
+    //    List<String> s1 = new ArrayList<String>();
 //    List<String> s2 = new ArrayList<String>();
 //    List<Integer> images = new ArrayList<Integer>();
     //List<String> s1 = dataBase.s1;
     //List<String> s2 = dataBase.s2;
     //List<Integer> images = dataBase.images;
     Container delData = new Container();
-
 
 
     // Tess fields
@@ -171,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             final int position = viewHolder.getAdapterPosition();
             //delData.setParam(s1.get(position), s2.get(position), images.get(position));
-          //  delData = dataBase.getItem(position);
+            //  delData = dataBase.getItem(position);
 
             //dataBase.delete(position);
             //s1 = dataBase.s1;
@@ -421,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //String newFileName = storageDir.getAbsolutePath() + "/" + filename;
             String newFileName = folder.getAbsolutePath() + "/" + filename;
             //String newFileName = Environment.getDataDirectory().getAbsolutePath() + "/" +
-             //       this.getPackageName() + "/files/tessdata/"+ filename;
+            //       this.getPackageName() + "/files/tessdata/"+ filename;
             out = new FileOutputStream(newFileName);
 
             byte[] buffer = new byte[1024];
@@ -461,14 +460,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void run() {
                     //  result[1] = extractText(TEST_DATA_PATH,"eng");
-                    result[1] = extractText(currentPhotoPath,"eng");
+                    result[1] = extractText(currentPhotoPath, "eng");
                     counter.countDown();
                 }
             });
             try {
                 counter.await();
                 long stop = System.currentTimeMillis();
-                System.out.println("Time used:   "+ (stop-start)/1000);
+                System.out.println("Time used:   " + (stop - start) / 1000);
                 runTesseractParser(result);
 
             } catch (InterruptedException e) {
@@ -511,17 +510,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         System.out.println("add Card\n");
-        Card card = cardsArray.get(cardsArray.size() -1);
+        Card card = cardsArray.get(cardsArray.size() - 1);
         card.setImage(currentPhotoPath);
 
-       List<String> contactName = Arrays.asList(card.getContactName().split(" "));
-        while (contactName.size() < 3) {
-            contactName.add("");
-        }
+        List<String> contactName = Arrays.asList(card.getContactName().split(" "));
 
-        card.setFirstName(contactName.get(1));
-        card.setLastName(contactName.get(0));
-        card.setFatherName(contactName.get(2));
+        switch (contactName.size()) {
+            case 2: {
+                card.setFirstName(contactName.get(0));
+                card.setFatherName(contactName.get(1));
+                break;
+            }
+            case 3: {
+                card.setFirstName(contactName.get(1));
+                card.setLastName(contactName.get(0));
+                card.setFatherName(contactName.get(2));
+                break;
+            }
+            default:
+                break;
+        }
 
         LocalSQL sql = new LocalSQL(MainActivity.this);
         long id = sql.addCard(card);

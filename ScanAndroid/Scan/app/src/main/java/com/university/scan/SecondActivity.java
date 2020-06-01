@@ -152,12 +152,13 @@ public class SecondActivity extends AppCompatActivity {
         openedEmails = 0;
         openedSites = 0;
 
-        outputFileUri = getIntent().getStringExtra("outputFileUri");
+        //outputFileUri = getIntent().getStringExtra("outputFileUri");
         String dir = getIntent().getStringExtra("fileDir");
+        outputFileUri = dir;
         System.out.println(dir);
         if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
             //Picasso.get().load(dir).into(mainImageView);
-            //Picasso.get().load(new File(dir)).into(mainImageView);
+            // Picasso.get().load(new File(dir)).into(mainImageView);
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
         }
 
@@ -584,8 +585,6 @@ public class SecondActivity extends AppCompatActivity {
         Card card = sql.getCard(StaticVar.var);
 
         System.out.println("StaticVar.var = " + StaticVar.var);
-
-        outputFileUri = card.getImage();
 
         ETFirstName.setText(card.getFirstName().trim());
         ETLastName.setText(card.getLastName().trim());
