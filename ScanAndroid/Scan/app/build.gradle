@@ -33,6 +33,7 @@ dependencies {
     implementation 'androidx.mediarouter:mediarouter:1.1.0'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     //added
     implementation 'cz.adaptech.android:tesseract4android:2.1.0'
 }

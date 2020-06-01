@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 import com.university.scan.SQL.LocalSQL;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -130,8 +131,11 @@ public class SecondActivity extends AppCompatActivity {
         openedSites = 0;
 
         outputFileUri  = getIntent().getStringExtra("outputFileUri");
-        if (outputFileUri != null && !outputFileUri.isEmpty()) {
-            mainImageView.setImageURI(Uri.parse(outputFileUri));
+        String dir = getIntent().getStringExtra("fileDir");
+        System.out.println(dir);
+        if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
+            Picasso.get().load(dir).into(mainImageView);
+            //mainImageView.setImageURI(Uri.parse(outputFileUri));
         }
 
         new Timer().schedule(new TimerTask() {
