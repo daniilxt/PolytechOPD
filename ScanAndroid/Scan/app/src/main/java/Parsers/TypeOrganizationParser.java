@@ -14,7 +14,7 @@ public class TypeOrganizationParser extends PhoneParser {
   private void parseTypeOfOrganization(String str) {
     String[] tmp = str.split(" ");
     for (String item : tmp) {
-      System.out.println("WORDS UTILS: " + item);
+     // System.out.println("WORDS UTILS: " + item);
       if (Utils.typeOfOrganization.contains(item.toLowerCase())) {
         super.visitCard.setTypeOfOrganization(item.toLowerCase());
       }

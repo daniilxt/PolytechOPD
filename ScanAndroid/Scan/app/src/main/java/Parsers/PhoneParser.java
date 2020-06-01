@@ -44,7 +44,7 @@ public class PhoneParser implements Parsable {
   private String toPhoneFormat(String str) {
     String tmp = str.replaceAll("[\\s\\-\\(\\)]", "");
     String telephoneNumber;
-    System.out.println("PHONE: " + tmp);
+   // System.out.println("PHONE: " + tmp);
     if (tmp.length() > 8) {
       if (tmp.charAt(0) == '+') {
         telephoneNumber = tmp.substring(0, 2) + "(" + tmp.substring(2, 5) + ")" + tmp.substring(5, 8) + "-" + tmp.substring(8, 10) + "-" + tmp.substring(10);

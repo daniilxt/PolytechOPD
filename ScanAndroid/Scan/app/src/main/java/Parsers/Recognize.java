@@ -24,8 +24,8 @@ public class Recognize {
     init();
     for (String str : in) {
       phoneParser.parse(str);
-      webSiteParser.parse(str);
       emailParser.parse(str);
+      webSiteParser.parse(str);
       typeOrganizationParser.parse(str);
 
       fullString.append(str);
@@ -33,7 +33,7 @@ public class Recognize {
     }
     System.out.println("Full - " + fullString);
     nameParser.parse(fullString.toString());
-   // addressParser.setName(visitCard.getContactName());
+    addressParser.setNamePerson(visitCard.getContactName());
     addressParser.parse(fullString.toString());
     visitCard.showCardInfo();
     visitCardArray.add(visitCard);
