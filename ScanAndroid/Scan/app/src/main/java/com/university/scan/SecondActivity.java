@@ -131,32 +131,30 @@ public class SecondActivity extends AppCompatActivity {
         openedEmails = 0;
         openedSites = 0;
 
-        outputFileUri  = getIntent().getStringExtra("outputFileUri");
+        outputFileUri = getIntent().getStringExtra("outputFileUri");
         String dir = getIntent().getStringExtra("fileDir");
         System.out.println(dir);
         if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
             //Picasso.get().load(dir).into(mainImageView);
-            Picasso.get().load(new File(dir)).into(mainImageView);
+            //Picasso.get().load(new File(dir)).into(mainImageView);
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
         }
 
-        new Timer().schedule(new TimerTask() {
-            @Override
+        new Thread() {
             public void run() {
-                SecondActivity.this.runOnUiThread(new Runnable() {
+                while (StaticVar.var == -1) {
+                }
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (StaticVar.var != -1) {
-                            showCard();
-                            cancel();
-                        }
+                        System.out.println("Show Card");
+                        showCard();
                     }
                 });
-
             }
-        }, 1000);
+        }.start();
 
-      //  mainImageView.setImageURI(Uri.parse(outputFileUri));
+        //  mainImageView.setImageURI(Uri.parse(outputFileUri));
 
 //        Toast toast = Toast.makeText(getApplicationContext(),
 //                idString, Toast.LENGTH_SHORT);
@@ -267,13 +265,13 @@ public class SecondActivity extends AppCompatActivity {
                 }
 
                 if (!isEmpty(ETSite1)) {
-                    card.setOfficeAddress(ETSite1.getText().toString());
+                    card.setWebsite(ETSite1.getText().toString());
                 }
                 if (!isEmpty(ETSite2)) {
-                    card.setOfficeAddress(ETSite2.getText().toString());
+                    card.setWebsite(ETSite2.getText().toString());
                 }
                 if (!isEmpty(ETSite3)) {
-                    card.setOfficeAddress(ETSite3.getText().toString());
+                    card.setWebsite(ETSite3.getText().toString());
                 }
 
                 LocalSQL sql = new LocalSQL(SecondActivity.this);
@@ -540,9 +538,9 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
-      //  showCard();
+        //  showCard();
         //getData();
-       // setData();
+        // setData();
     }
 
     public void showCard() {

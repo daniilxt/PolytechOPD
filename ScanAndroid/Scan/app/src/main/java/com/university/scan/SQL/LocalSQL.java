@@ -211,9 +211,6 @@ public class LocalSQL extends SQLiteOpenHelper {
                 contentValuesList.put("patronymic", card.getFatherName());
                 nameId = dbaseW.insert("Name", null, contentValuesList);
 
-                System.out.println("Insert first name = " + card.getFirstName());
-                System.out.println("nameId =" + nameId);
-
                 contentValuesList.clear();
                 contentValuesList.put("name", card.getCompanyName());
                 contentValuesList.put("type", card.getTypeOfOrganization());
