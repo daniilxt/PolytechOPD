@@ -283,11 +283,11 @@ public class LocalSQL extends SQLiteOpenHelper {
                     " ON Card.name_id = Name.id WHERE Card.id = " + id + ";";
             Cursor cursorName = dbaseR.rawQuery(rawQueryName, null);
 
-            cursorName.moveToFirst();
-
-            card.setFirstName(cursorName.getString(cursorName.getColumnIndex("first_name")));
-            card.setLastName(cursorName.getString(cursorName.getColumnIndex("last_name")));
-            card.setFatherName(cursorName.getString(cursorName.getColumnIndex("patronymic")));
+            if (cursorName.moveToFirst()) {
+                card.setFirstName(cursorName.getString(cursorName.getColumnIndex("first_name")));
+                card.setLastName(cursorName.getString(cursorName.getColumnIndex("last_name")));
+                card.setFatherName(cursorName.getString(cursorName.getColumnIndex("patronymic")));
+            }
 
 //            switch (cursor.getCount()) {
 //                case 1:
@@ -310,9 +310,10 @@ public class LocalSQL extends SQLiteOpenHelper {
                     " ON Card.company_id = Company.id WHERE Card.id = " + id + ";";
             Cursor cursorCompany = dbaseR.rawQuery(rawQueryCompany, null);
 
-            cursorCompany.moveToFirst();
-            card.setCompanyName(cursorCompany.getString(cursorCompany.
-                    getColumnIndex("name")));
+            if (cursorCompany.moveToFirst()) {
+                card.setCompanyName(cursorCompany.getString(cursorCompany.
+                        getColumnIndex("name")));
+            }
 //
 //            if (cursor.getColumnCount() == 1) {
 //                card.setCompanyName(cursorCompany.getString(cursorCompany.
