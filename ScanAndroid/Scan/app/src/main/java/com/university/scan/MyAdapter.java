@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import Parsers.Card;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements Filterable {
 
     //List<String> data1;
@@ -36,6 +38,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     DataBase dataBase;
     List<Integer> fil;
     Context context;
+    private Card reserveCard;
     int count = 0;
 
     private List<Record> records;
@@ -75,9 +78,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         notifyDataSetChanged();
     }
 
-    public void addItem(Record record) {
-        records.add(record);
-        notifyDataSetChanged();
+    public void returnItem(int position, Record record) {
+        records.add(position, record);
+        LocalSQL sql = new LocalSQL(context);
+        sql.addCard(reserveCard);
+       //notifyDataSetChanged();
     }
 
     public void clearItems() {
@@ -93,7 +98,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     public Record remove(int position) {
         Record record = records.remove(position);
         LocalSQL sql = new LocalSQL(context);
-        sql.deleteCard(record.getId());
+        reserveCard = sql.deleteCard(record.getId());
         notifyItemRemoved(position);
         return record;
     }

@@ -310,7 +310,7 @@ public class LocalSQL extends SQLiteOpenHelper {
 
             cursorCompany.close();
         }
-        dbaseR.close();
+        //dbaseR.close();
         return card;
     }
 
@@ -505,12 +505,15 @@ public class LocalSQL extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteCard(long id) {
+    public Card deleteCard(long id) {
         SQLiteDatabase dbaseW = this.getWritableDatabase();
+
+        Card card = getCard(id);
 
         int delCount = dbaseW.delete("Card", "id = " + id, null);
         System.out.println("delete from db = " + delCount);
         dbaseW.close();
+        return card;
     }
 
     public void deleteAll() {

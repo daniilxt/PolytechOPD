@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //s1 = dataBase.s1;
             //s2 = dataBase.s2;
             //images = dataBase.images;
-            Record record = myAdapter.remove(position);
+           final Record record = myAdapter.remove(position);
             Snackbar.make(recyclerView, record.getCompanyName(), Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
@@ -185,8 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //s1 = dataBase.s1;
                             //s2 = dataBase.s2;
                             //images = dataBase.images;
-                            //myAdapter.insert(delData, position);
-
+                            myAdapter.returnItem(position, record);
                             myAdapter.notifyItemInserted(position);
                         }
                     }).show();
