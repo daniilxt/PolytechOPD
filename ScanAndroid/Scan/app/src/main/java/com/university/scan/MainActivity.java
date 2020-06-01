@@ -519,8 +519,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             contactName.add("");
         }
 
-        card.setFirstName(contactName.get(0));
-        card.setLastName(contactName.get(1));
+        card.setFirstName(contactName.get(1));
+        card.setLastName(contactName.get(0));
         card.setFatherName(contactName.get(2));
 
         LocalSQL sql = new LocalSQL(MainActivity.this);
