@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 StaticVar.var = record.getId();
 
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                intent.putExtra("outputFileUri", record.getImage());
+                intent.putExtra("fileDir", record.getImage());
                 startActivity(intent);
             }
         });
@@ -260,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //imageView.setImageURI(outputFileUri);
                 System.out.println("picture taken!");
                 System.out.println(outputFileUri.getPath());
+                System.out.println(outputFileUri);
 
                 //
                 Thread thread = new Thread(new TessRun());
@@ -270,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Intent intent = new Intent(this, SecondActivity.class);
                 intent.putExtra("outputFileUri", outputFileUri.getPath());
+                intent.putExtra("fileDir", currentPhotoPath);
                 startActivity(intent);
             }
         }
@@ -367,6 +369,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 outputFileUri = FileProvider.getUriForFile(this,
                         "com.university.scan.fileprovider",
                         saveDir);
+
+                System.out.println(saveDir);
+                System.out.println(outputFileUri.getPath());
                 System.out.println("5");
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
