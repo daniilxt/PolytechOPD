@@ -21,8 +21,10 @@ public class NameParser extends AddressParser {
                 String name;
                 if (i >=3) {
                     name = upperWords[i - 3] + " " + upperWords[i - 2] + " " + upperWords[i - 1];// fiiiiiix
-                } else {
+                } else if (i == 2) {
                     name = upperWords[i - 2] + " " + upperWords[i - 1];// fiiiiiix
+                } else {
+                    name = "";
                 }
               System.out.println("Added name is: "+ name + " i is:" + i + Arrays.toString(upperWords));
                 visitCard.setContactName(name);
