@@ -521,6 +521,8 @@ public class SecondActivity extends AppCompatActivity {
 
         System.out.println("StaticVar.var = " + StaticVar.var);
 
+        mainImageView.setImageURI(Uri.parse(card.getImage()));
+
         ETFirstName.setText(card.getFirstName().trim());
         ETLastName.setText(card.getLastName().trim());
         ETFatherName.setText(card.getFatherName().trim());

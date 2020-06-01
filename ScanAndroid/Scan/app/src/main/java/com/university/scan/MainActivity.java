@@ -504,15 +504,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tessractParser.getCardsArray();
 
 
-        System.out.println("asddddddddddddddddd\n");
+        System.out.println("add Card\n");
         Card card = cardsArray.get(cardsArray.size() -1);
         card.setImage(currentPhotoPath);
 
-        card.setFirstName("add Card in db");
         LocalSQL sql = new LocalSQL(MainActivity.this);
         long id = sql.addCard(card);
 
         StaticVar.var = id;
-
     }
 }
