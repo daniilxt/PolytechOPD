@@ -28,6 +28,7 @@ import com.university.scan.SQL.LocalSQL;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -134,7 +135,8 @@ public class SecondActivity extends AppCompatActivity {
         String dir = getIntent().getStringExtra("fileDir");
         System.out.println(dir);
         if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
-            Picasso.get().load(dir).into(mainImageView);
+            //Picasso.get().load(dir).into(mainImageView);
+            Picasso.get().load(new File(dir)).into(mainImageView);
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
         }
 
