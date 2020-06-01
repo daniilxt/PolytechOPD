@@ -3,6 +3,7 @@ package com.university.scan;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import com.university.scan.SQL.LocalSQL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Parsers.Card;
 
@@ -120,11 +123,27 @@ public class SecondActivity extends AppCompatActivity {
         openedSites = 0;
 
         outputFileUri  = getIntent().getStringExtra("outputFileUri");
+        if (outputFileUri != null && !outputFileUri.isEmpty()) {
+            mainImageView.setImageURI(Uri.parse(outputFileUri));
+        }
 
-        System.out.println("picture taken!");
-        System.out.println(outputFileUri);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SecondActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (StaticVar.var != -1) {
+                            showCard();
+                            cancel();
+                        }
+                    }
+                });
 
-        mainImageView.setImageURI(Uri.parse(outputFileUri));
+            }
+        }, 1000);
+
+      //  mainImageView.setImageURI(Uri.parse(outputFileUri));
 
 //        Toast toast = Toast.makeText(getApplicationContext(),
 //                idString, Toast.LENGTH_SHORT);
@@ -496,7 +515,7 @@ public class SecondActivity extends AppCompatActivity {
        // setData();
     }
 
-    private void showCard() {
+    public void showCard() {
 //        ETSite1.setClickable(true);
 //        ETAddress1.setClickable(true);
 //        ETEmail1.setClickable(true);
@@ -516,12 +535,12 @@ public class SecondActivity extends AppCompatActivity {
 //        BDelSite.setClickable(true);
 //        floatingActionButton2.setClickable(true);
 
-        LocalSQL sql = new LocalSQL(SecondActivity.this);
+        LocalSQL sql = new LocalSQL(this);
         Card card = sql.getCard(StaticVar.var);
 
         System.out.println("StaticVar.var = " + StaticVar.var);
 
-        mainImageView.setImageURI(Uri.parse(card.getImage()));
+        outputFileUri = card.getImage();
 
         ETFirstName.setText(card.getFirstName().trim());
         ETLastName.setText(card.getLastName().trim());
