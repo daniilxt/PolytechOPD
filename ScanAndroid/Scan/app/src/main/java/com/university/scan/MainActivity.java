@@ -507,6 +507,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         System.out.println("add Card\n");
         Card card = cardsArray.get(cardsArray.size() - 1);
+        System.out.println("Card in db path is" + currentPhotoPath);
         card.setImage(currentPhotoPath);
 
         List<String> contactName = Arrays.asList(card.getContactName().split(" "));

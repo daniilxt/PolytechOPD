@@ -155,8 +155,8 @@ public class SecondActivity extends AppCompatActivity {
         //outputFileUri = getIntent().getStringExtra("outputFileUri");
         String dir = getIntent().getStringExtra("fileDir");
         outputFileUri = dir;
-        System.out.println(dir);
         if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
+            System.out.println(dir);
             //Picasso.get().load(dir).into(mainImageView);
             Picasso.get().load(new File(dir)).into(mainImageView);
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
@@ -222,8 +222,6 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Card card = new Card();
-
-                card.setImage(outputFileUri);
 
                 card.setId(StaticVar.var);
 
@@ -583,6 +581,13 @@ public class SecondActivity extends AppCompatActivity {
 
         LocalSQL sql = new LocalSQL(this);
         Card card = sql.getCard(StaticVar.var);
+
+//        String dir = card.getImage();
+//
+//        if (dir != null && !dir.isEmpty()) {
+//            outputFileUri = dir;
+//            Picasso.get().load(new File(outputFileUri)).into(mainImageView);
+//        }
 
         System.out.println("StaticVar.var = " + StaticVar.var);
 

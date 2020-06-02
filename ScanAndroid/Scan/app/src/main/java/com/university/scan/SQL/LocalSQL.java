@@ -193,6 +193,12 @@ public class LocalSQL extends SQLiteOpenHelper {
                 ccompanyId = cursor.getLong(cursor.getColumnIndex("company_id"));
 
                 ContentValues cv = new ContentValues();
+                cv.put("photo", card.getImage());
+
+                dbaseW.update("Card", cv, "id = ?", new String[]{Long.toString(id)});
+                cv.clear();
+
+                cv = new ContentValues();
                 cv.put("first_name", card.getFirstName());
                 cv.put("last_name", card.getLastName());
                 cv.put("patronymic", card.getFatherName());
@@ -248,67 +254,69 @@ public class LocalSQL extends SQLiteOpenHelper {
                     card.setWebsite(cursor.getString(cursor.getColumnIndex("site")));
                 } while (cursor.moveToNext());
             }
-            cursor.close();
 
             String rawQueryPhone = "SELECT phone FROM Phone INNER JOIN CardPhone " +
                     "ON Phone.id = CardPhone.phone_id WHERE CardPhone.card_id = " + id + ";";
-            Cursor cursorPhone = dbaseR.rawQuery(rawQueryPhone, null);
+            cursor = dbaseR.rawQuery(rawQueryPhone, null);
 
-            if (cursorPhone.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 do {
-                    card.setPhoneNumber(cursorPhone.getString(cursorPhone.
+                    card.setPhoneNumber(cursor.getString(cursor.
                             getColumnIndex("phone")));
-                } while (cursorPhone.moveToNext());
+                } while (cursor.moveToNext());
             }
-
-            cursorPhone.close();
 
             String rawQueryAddress = "SELECT address FROM Address INNER JOIN CardAddress " +
                     "ON Address.id = CardAddress.address_id WHERE CardAddress.card_id = " + id + ";";
-            Cursor cursorAddress = dbaseR.rawQuery(rawQueryAddress, null);
+            cursor = dbaseR.rawQuery(rawQueryAddress, null);
 
-            if (cursorAddress.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 do {
-                    card.setOfficeAddress(cursorAddress.getString(cursorAddress.
+                    card.setOfficeAddress(cursor.getString(cursor.
                             getColumnIndex("address")));
-                } while (cursorAddress.moveToNext());
+                } while (cursor.moveToNext());
             }
-            cursorAddress.close();
 
             String rawQueryEmail = "SELECT email FROM Email INNER JOIN CardEmail " +
                     "ON Email.id = CardEmail.email_id WHERE CardEmail.card_id = " + id + ";";
-            Cursor cursorEmail = dbaseR.rawQuery(rawQueryEmail, null);
+            cursor = dbaseR.rawQuery(rawQueryEmail, null);
 
-            if (cursorEmail.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 do {
-                    card.setEmails(cursorEmail.getString(cursorEmail.
+                    card.setEmails(cursor.getString(cursor.
                             getColumnIndex("email")));
-                } while (cursorEmail.moveToNext());
+                } while (cursor.moveToNext());
             }
-            cursorEmail.close();
 
             String rawQueryName = "SELECT first_name, last_name, patronymic FROM Name INNER JOIN Card" +
                     " ON Card.name_id = Name.id WHERE Card.id = " + id + ";";
-            Cursor cursorName = dbaseR.rawQuery(rawQueryName, null);
+            cursor = dbaseR.rawQuery(rawQueryName, null);
 
-            if (cursorName.moveToFirst()) {
-                card.setFirstName(cursorName.getString(cursorName.getColumnIndex("first_name")));
-                card.setLastName(cursorName.getString(cursorName.getColumnIndex("last_name")));
-                card.setFatherName(cursorName.getString(cursorName.getColumnIndex("patronymic")));
+            if (cursor.moveToFirst()) {
+                card.setFirstName(cursor.getString(cursor.getColumnIndex("first_name")));
+                card.setLastName(cursor.getString(cursor.getColumnIndex("last_name")));
+                card.setFatherName(cursor.getString(cursor.getColumnIndex("patronymic")));
             }
 
-            cursorName.close();
+            String rawQueryPhoto = "SELECT photo FROM Card" +
+                   " WHERE Card.id = " + id + ";";
+            cursor = dbaseR.rawQuery(rawQueryPhoto, null);
+
+            if (cursor.moveToFirst()) {
+                card.setImage(cursor.getString(cursor.
+                        getColumnIndex("photo")));
+            }
 
             String rawQueryCompany = "SELECT name FROM Company INNER JOIN Card" +
                     " ON Card.company_id = Company.id WHERE Card.id = " + id + ";";
-            Cursor cursorCompany = dbaseR.rawQuery(rawQueryCompany, null);
+            cursor = dbaseR.rawQuery(rawQueryCompany, null);
 
-            if (cursorCompany.moveToFirst()) {
-                card.setCompanyName(cursorCompany.getString(cursorCompany.
+            if (cursor.moveToFirst()) {
+                card.setCompanyName(cursor.getString(cursor.
                         getColumnIndex("name")));
             }
 
-            cursorCompany.close();
+            cursor.close();
         }
         //dbaseR.close();
         return card;
@@ -316,7 +324,6 @@ public class LocalSQL extends SQLiteOpenHelper {
 
     public List<Record> getRecords() {
         SQLiteDatabase dbaseR = getReadableDatabase();
-        Card card;
 
         List<Record> records = new ArrayList<>();
 
@@ -328,8 +335,7 @@ public class LocalSQL extends SQLiteOpenHelper {
                 do {
                     long id = cursor.getLong(0);
                     if (id != -1) {
-                        card = getCard(id);
-                        records.add(cardToRecord(card));
+                        records.add(cardToRecord(getCard(id)));
                     }
                 } while (cursor.moveToNext());
             }
@@ -482,7 +488,7 @@ public class LocalSQL extends SQLiteOpenHelper {
         dbaseR.close();
     }
 
-    public static Record cardToRecord(Card card) {
+    private static Record cardToRecord(Card card) {
         return new Record(card.getId(),
                 card.getCompanyName(),
                 card.getFirstName(),
