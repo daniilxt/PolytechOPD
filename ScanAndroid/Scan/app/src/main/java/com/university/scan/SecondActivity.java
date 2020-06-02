@@ -85,6 +85,36 @@ public class SecondActivity extends AppCompatActivity {
     int myImage;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        String dir = getIntent().getStringExtra("fileDir");
+        outputFileUri = dir;
+        if (dir != null) {
+            System.out.println("fileDir" + dir);
+            //Picasso.get().load(dir).into(mainImageView);
+            Picasso.get().load(new File(dir)).into(mainImageView);
+            //mainImageView.setImageURI(Uri.parse(outputFileUri));
+        }
+
+        new Thread() {
+            public void run() {
+                while (StaticVar.var == -1) {
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Show Card");
+                        synchronized(this) {
+                            showCard();
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
@@ -155,8 +185,8 @@ public class SecondActivity extends AppCompatActivity {
         //outputFileUri = getIntent().getStringExtra("outputFileUri");
         String dir = getIntent().getStringExtra("fileDir");
         outputFileUri = dir;
-        if (outputFileUri != null && !outputFileUri.isEmpty() && dir != null) {
-            System.out.println(dir);
+        if (dir != null) {
+            System.out.println("fileDir" + dir);
             //Picasso.get().load(dir).into(mainImageView);
             Picasso.get().load(new File(dir)).into(mainImageView);
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
@@ -230,12 +260,14 @@ public class SecondActivity extends AppCompatActivity {
 
                 card.setId(StaticVar.var);
 
-                if (isEmpty(ETFirstName) || isEmpty(ETLastName) || isEmpty(ETFatherName) || isEmpty(ETCompany)) {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Please entry all fields", Toast.LENGTH_SHORT);
-                    toast.show();
-                    return;
-                }
+//                if (isEmpty(ETFirstName) || isEmpty(ETLastName) || isEmpty(ETFatherName) || isEmpty(ETCompany)) {
+//                    Toast toast = Toast.makeText(getApplicationContext(),
+//                            "Please entry all fields", Toast.LENGTH_SHORT);
+//                    toast.show();
+//                    return;
+//                }
+
+                card.setImage(outputFileUri);
 
                 card.setFirstName(ETFirstName.getText().toString());
                 card.setLastName(ETLastName.getText().toString());

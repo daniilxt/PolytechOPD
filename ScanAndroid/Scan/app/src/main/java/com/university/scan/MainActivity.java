@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 intent.putExtra("fileDir", record.getImage());
+                System.out.println("fileDir" + record.getImage());
                 startActivity(intent);
             }
         });
