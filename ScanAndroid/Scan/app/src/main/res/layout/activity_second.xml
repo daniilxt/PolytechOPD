@@ -60,7 +60,7 @@
 
                 <EditText
                     android:id="@+id/ETLastName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -78,7 +78,7 @@
 
                 <EditText
                     android:id="@+id/ETFirstName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -96,7 +96,7 @@
 
                 <EditText
                     android:id="@+id/ETFatherName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -114,7 +114,7 @@
 
                 <EditText
                     android:id="@+id/ETCompany"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -132,7 +132,7 @@
 
                 <EditText
                     android:id="@+id/ETPhone1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -163,7 +163,7 @@
 
                 <EditText
                     android:id="@+id/ETPhone2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -182,7 +182,7 @@
 
                 <EditText
                     android:id="@+id/ETPhone3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -200,7 +200,7 @@
 
                 <EditText
                     android:id="@+id/ETEmail1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -231,7 +231,7 @@
 
                 <EditText
                     android:id="@+id/ETEmail2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -250,7 +250,7 @@
 
                 <EditText
                     android:id="@+id/ETEmail3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -268,7 +268,7 @@
 
                 <EditText
                     android:id="@+id/ETAddress1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -299,7 +299,7 @@
 
                 <EditText
                     android:id="@+id/ETAddress2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -318,7 +318,7 @@
 
                 <EditText
                     android:id="@+id/ETAddress3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -336,7 +336,7 @@
 
                 <EditText
                     android:id="@+id/ETSite1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -367,7 +367,7 @@
 
                 <EditText
                     android:id="@+id/ETSite2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
@@ -386,7 +386,7 @@
 
                 <EditText
                     android:id="@+id/ETSite3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />

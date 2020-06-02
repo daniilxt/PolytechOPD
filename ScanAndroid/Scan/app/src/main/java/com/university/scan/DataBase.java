@@ -29,7 +29,7 @@ public class DataBase {
         s2.add("Swift");
         s2.add("Type");
         s2.add("Ad");
-        images.add(R.drawable.cpp);
+        /*images.add(R.drawable.cpp);
         images.add(R.drawable.c_sharp);
         images.add(R.drawable.java);
         images.add(R.drawable.javascript);
@@ -38,7 +38,7 @@ public class DataBase {
         images.add(R.drawable.ruby);
         images.add(R.drawable.swift);
         images.add(R.drawable.typescript);
-        images.add(R.drawable.visual_studio);
+        images.add(R.drawable.visual_studio);*/
     }
 
     public void delete(int position){

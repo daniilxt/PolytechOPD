@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String MyPREFERENCES = "MyPrefs";
 
 
-    DataBase dataBase = new DataBase();
-
     //    List<String> s1 = new ArrayList<String>();
 //    List<String> s2 = new ArrayList<String>();
 //    List<Integer> images = new ArrayList<Integer>();
