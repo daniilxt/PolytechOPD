@@ -162,6 +162,11 @@ public class SecondActivity extends AppCompatActivity {
             //mainImageView.setImageURI(Uri.parse(outputFileUri));
         }
 
+        boolean isLoading = getIntent().getBooleanExtra("isLoading", false);
+        if (isLoading) {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        }
+
         new Thread() {
             public void run() {
                 while (StaticVar.var == -1) {
@@ -568,6 +573,8 @@ public class SecondActivity extends AppCompatActivity {
         enableEditText(ETEmail1);
         enableEditText(ETAddress1);
         enableEditText(ETSite1);
+
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
         BAddPhone.setEnabled(true);
         BDelPhone.setEnabled(true);

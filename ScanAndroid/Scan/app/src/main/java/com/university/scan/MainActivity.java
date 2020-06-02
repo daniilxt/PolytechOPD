@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(this, SecondActivity.class);
                 intent.putExtra("outputFileUri", outputFileUri.getPath());
                 intent.putExtra("fileDir", currentPhotoPath);
+                intent.putExtra("isLoading", true);
                 startActivity(intent);
             }
         }
