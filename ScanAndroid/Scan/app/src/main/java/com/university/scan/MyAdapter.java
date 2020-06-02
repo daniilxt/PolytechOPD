@@ -35,13 +35,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     List<String> data1All;
     List<String> data2All;
     List<Integer> imagesAll;
-    DataBase dataBase;
+    //DataBase dataBase;
     List<Integer> fil;
     Context context;
     private Card reserveCard;
     int count = 0;
 
     private List<Record> records;
+    private List<Record> recordsCopy;
 
     private OnItemClickListener mListener;
 
@@ -58,6 +59,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         context = ct;
         LocalSQL sql = new LocalSQL(ct);
         this.records = sql.getRecords();
+        recordsCopy = new ArrayList<>();
+        recordsCopy = this.records;
         fil = new ArrayList<Integer>();
     }
 
@@ -97,6 +100,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
     public Record remove(int position) {
         Record record = records.remove(position);
+        recordsCopy.remove(position);
         LocalSQL sql = new LocalSQL(context);
         reserveCard = sql.deleteCard(record.getId());
         notifyItemRemoved(position);
@@ -135,19 +139,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
-            List<Integer> filterList = new ArrayList<Integer>();
+            List<Record> filterList = new ArrayList<>();
+            System.out.println(constraint);
 
+            LocalSQL sql = new LocalSQL(context);
+            records = sql.getRecords();
 
             if (constraint.toString().isEmpty()){
-                for (Integer i = 0; i < data1All.size(); i++){
-                    filterList.add(i);
+                for (int i = 0; i < records.size(); i++){
+                    filterList.add(records.get(i));
                 }
+                //System.out.println("emplty");
+                //records = sql.getRecords();
+                //System.out.println(records.size());
+
             } else {
-                for (Integer i = 0; i < dataBase.getS1().size(); i++){
-                    if (data1All.get(i).toLowerCase().contains(constraint.toString().toLowerCase())
-                    || data2All.get(i).toLowerCase().contains(constraint.toString().toLowerCase()))
+                for (int i = 0; i < records.size(); i++) {
+                    if (records.get(i).getFatherName().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getFirstName().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getLastName().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getCompanyName().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getEmails().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getOfficeAddress().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getPhoneNumber().toLowerCase().contains(constraint.toString().toLowerCase())
+                    || records.get(i).getWebsite().toLowerCase().contains(constraint.toString().toLowerCase()))
                     {
-                        filterList.add(i);
+                        filterList.add(records.get(i));
                     }
                 }
             }
@@ -160,18 +177,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            fil.clear();
-            fil.addAll((Collection<? extends Integer>) results.values);
-            dataBase.clearDB();
+            records.clear();
+            records.addAll((Collection<? extends Record>) results.values);
+            System.out.println(records.size());
+            //dataBase.clearDB();
             //data1.clear();
             //data2.clear();
             //images.clear();
-            for (Integer i:fil){
-                dataBase.insert(i, data1All.get(i), data2All.get(i), imagesAll.get(i));
+            //for (Integer i:fil){
+                //dataBase.insert(i, data1All.get(i), data2All.get(i), imagesAll.get(i));
                 //data1.add(data1All.get(i));
                 //data2.add(data2All.get(i));
                 //images.add(imagesAll.get(i));
-            }
+            //}
             notifyDataSetChanged();
         }
     };
